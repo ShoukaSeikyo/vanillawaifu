@@ -1,0 +1,20 @@
+{
+  "required": true,
+  "package": "net.orandja.vw.accessor",
+  "compatibilityLevel": "JAVA_16",
+  "mixins": [
+    "CraftingInventoryAccessor",
+    "CraftingScreenHandlerAccessor",
+    "DispenserBlockEntityAccessor",
+    "PlayerScreenHandlerAccessor",
+    "RecipeManagerAccessor",
+    "ScreenHandlerAccessor",
+    "DefaultedListAccessor",
+    "ItemFrameEntityAccessor"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

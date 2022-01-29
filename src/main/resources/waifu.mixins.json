@@ -1,0 +1,67 @@
+{
+  "required": true,
+  "package": "net.orandja.vw.mixin",
+  "compatibilityLevel": "JAVA_16",
+  "mixins": [
+    "AbstractFurnaceBlockEntityMixin",
+    "AbstractFurnaceBlockMixin",
+
+    "AnimalEntityMixin",
+
+    "BatEntityMixin",
+
+    "BrewingStandBlockEntityMixin",
+    "BrewingStandBlockMixin",
+
+    "BucketItemMixin",
+
+    "ChestBlockEntityMixin",
+    "ChestBlockMixin",
+
+    "CropBlockMixin",
+
+    "DispenserBlockMixin",
+
+    "EnchantmentMixin",
+
+    "ExplosionMixin",
+
+    "GrindstoneScreenHandlerMixin",
+
+    "HoeItemMixin",
+
+    "HopperBlockEntityMixin",
+    "HopperBlockMixin",
+
+    "KelpPlantBlockMixin",
+
+    "PillarBlockMixin",
+
+    "PlayerEntityMixin",
+
+    "SchoolingFishEntityMixin",
+
+    "ServerPlayerEntityMixin",
+
+    "ServerWorldMixin",
+
+    "ShulkerBoxBlockEntityMixin",
+    "ShulkerBoxBlockMixin",
+
+    "PickaxeItemMixin",
+    "ShovelItemMixin",
+
+    "DamageTrackerMixin",
+
+    "MobSpawnerLogicMixin",
+    "ExperienceOrbEntityMixin",
+
+    "BarrelBlockEntityMixin",
+    "BarrelBlockMixin"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

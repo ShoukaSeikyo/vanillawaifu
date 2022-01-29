@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "package": "net.orandja.vanillawaifu.mods",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "WhitelistedChest$ChestBlockMixin",
+    "WhitelistedChest$ChestBlockEntityMixin"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
