@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.loot.context.LootContext;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.orandja.vw.logic2.BlockWithEnchantment;
+import net.orandja.vw.logic.BlockWithEnchantment;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

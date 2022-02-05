@@ -11,24 +11,23 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
-import net.orandja.vw.logic.ShulkerBoxBlockEntityMixinLogic;
-import net.orandja.vw.mods.CloudBox;
-import org.jetbrains.annotations.Nullable;
+import net.orandja.vw.logic.CloudChannel;
+import net.orandja.vw.logic.CloudShulkerBox;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ShulkerBoxBlockEntity.class)
-abstract class ShulkerBoxBlockEntityMixin extends LockableContainerBlockEntity implements ShulkerBoxBlockEntityMixinLogic {
+abstract class ShulkerBoxBlockEntityMixin extends LockableContainerBlockEntity implements CloudShulkerBox {
 
     protected ShulkerBoxBlockEntityMixin(BlockEntityType<?> blockEntityType, BlockPos blockPos, BlockState blockState) {
         super(blockEntityType, blockPos, blockState);
     }
 
-    @Shadow protected native void setInvStackList(DefaultedList<ItemStack> list);
+    @Shadow
+    protected native void setInvStackList(DefaultedList<ItemStack> list);
 
     @Override
     public void setBoxInventory(DefaultedList<ItemStack> list) {
@@ -50,6 +49,5 @@ abstract class ShulkerBoxBlockEntityMixin extends LockableContainerBlockEntity i
         writeBoxTag(tag, info, super::writeNbt);
     }
 
-    @Getter @Setter
-    private CloudBox.CloudChannel channel;
+    @Getter @Setter private CloudChannel channel;
 }

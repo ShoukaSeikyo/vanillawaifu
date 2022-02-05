@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "id": "vanilla-waifu",
-  "version": "${version}",
+  "id": "vanillawaifu",
+  "version": "0.1.0",
   "name": "VanillaWaifu",
   "description": "",
   "authors": [
@@ -11,7 +11,7 @@
     "homepage": "https://shoukaseikyo.fr"
   },
   "license": "ALL RIGHTS RESERVED",
-  "icon": "assets/modid/icon.png",
+  "icon": "assets/vanillawaifu/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
@@ -22,6 +22,7 @@
     ]
   },
   "mixins": [
+    "waifu.test.mixins.json",
     "waifu.ac.mixins.json",
     "waifu.mixins.json"
   ],

@@ -12,8 +12,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
-import net.orandja.vw.maccessors.BarrelInventoryAccessor;
-import net.orandja.vw.logic.DeepBarrelLogic;
+import net.orandja.vw.logic.DeepBarrelBlock;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -21,10 +20,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import static net.orandja.vw.utils.ItemUtilsKt.areStacksCompatible;
-
 @Mixin(BarrelBlockEntity.class)
-public abstract class BarrelBlockEntityMixin extends LootableContainerBlockEntity implements BarrelInventoryAccessor, DeepBarrelLogic {
+public abstract class BarrelBlockEntityMixin extends LootableContainerBlockEntity implements DeepBarrelBlock {
 
     @Getter @Setter short infinity = 0;
     @Getter @Setter short efficiency = 0;
@@ -36,22 +33,22 @@ public abstract class BarrelBlockEntityMixin extends LootableContainerBlockEntit
 
     @Inject(method = "readNbt", at = @At("HEAD"), cancellable = true)
     public void readNbt(NbtCompound tag, CallbackInfo info) {
-        this.readNbt(tag, info, super::readNbt);
+        this.loadEnchantments(tag, info, super::readNbt);
     }
 
     @Inject(method = "writeNbt", at = @At("HEAD"), cancellable = true)
     public void writeNbt(NbtCompound tag, CallbackInfo info) {
-        this.writeNbt(tag, info, super::writeNbt);
+        this.saveEnchantments(tag, info, super::writeNbt);
     }
 
     @Inject(method = "size", cancellable = true, at = @At("HEAD"))
     public void size(CallbackInfoReturnable<Integer> info) {
-        info.setReturnValue(this.inventory.size());
+        getBarrelSize(info);
     }
 
     @Override
     public boolean isValid(int slot, ItemStack stack) {
-        return areStacksCompatible(this.inventory.get(0), stack);
+        return isValidForBarrel(slot, stack);
     }
 
     @Inject(method = "createScreenHandler", at = @At("HEAD"), cancellable = true)

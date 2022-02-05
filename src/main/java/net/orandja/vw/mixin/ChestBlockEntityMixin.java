@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.block.entity.ChestBlockEntity;
 import net.minecraft.nbt.NbtCompound;
-import net.orandja.vw.logic2.WhitelistedChestBlock;
+import net.orandja.vw.logic.WhitelistedChestBlock;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

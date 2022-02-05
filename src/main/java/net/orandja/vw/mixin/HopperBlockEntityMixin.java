@@ -7,26 +7,31 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.block.entity.Hopper;
 import net.minecraft.block.entity.HopperBlockEntity;
 import net.minecraft.block.entity.LockableContainerBlockEntity;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.state.property.Property;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.World;
-import net.orandja.vw.logic2.EnchantedHopper;
+import net.orandja.vw.logic.EnchantedHopper;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.List;
 import java.util.function.BooleanSupplier;
+import java.util.function.Function;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 @Mixin(value = HopperBlockEntity.class, priority = 1001)
 public abstract class HopperBlockEntityMixin extends LockableContainerBlockEntity implements EnchantedHopper {
@@ -58,6 +63,21 @@ public abstract class HopperBlockEntityMixin extends LockableContainerBlockEntit
     @Redirect(method = "insertAndExtract", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/BlockState;get(Lnet/minecraft/state/property/Property;)Ljava/lang/Comparable;"))
     private static Comparable<?> redstoneEnabled(BlockState state2, Property<Boolean> value, World world, BlockPos pos, BlockState state, HopperBlockEntity blockEntity, BooleanSupplier booleanSupplier) {
         return Companion.redstoneEnabled(world, pos, state, blockEntity, booleanSupplier);
+    }
+
+    @ModifyConstant(method = "getInputInventory", constant = @Constant(doubleValue = 1.0))
+    private static double offsetKnockback(double constant, World world, Hopper hopper) {
+        return Companion.offsetKnockback(world, hopper);
+    }
+
+    @Redirect(method = "getInputItemEntities", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/shape/VoxelShape;getBoundingBoxes()Ljava/util/List;"))
+    private static List<Box> expandSweeping(VoxelShape instance, World world, Hopper hopper) {
+        return Companion.expandSweeping(instance.getBoundingBoxes(), world, hopper);
+    }
+
+    @Redirect(method = "getInputItemEntities", at = @At(value = "INVOKE", target = "Ljava/util/stream/Stream;flatMap(Ljava/util/function/Function;)Ljava/util/stream/Stream;"))
+    private static Stream<? super Box> offsetItemZone(Stream<Box> instance, Function<Box, Stream<ItemEntity>> function, World world, Hopper hopper) {
+        return instance.flatMap(box -> world.getEntitiesByClass(ItemEntity.class, box.offset(hopper.getHopperX() - 0.5, Companion.offsetItemZone(hopper), hopper.getHopperZ() - 0.5), EntityPredicates.VALID_ENTITY).stream());
     }
 
     @Shadow
@@ -118,19 +138,18 @@ public abstract class HopperBlockEntityMixin extends LockableContainerBlockEntit
         return getInvStackList();
     }
 
-    @Getter
-    @Setter
-    short mending = 0;
-    @Getter
-    @Setter
-    short silkTouch = 0;
-    @Getter
-    @Setter
-    short efficiency = 0;
-    @Getter
-    @Setter
-    @Shadow
-    private int transferCooldown;
+    @Getter @Setter short mending = 0;
+    @Getter @Setter short silkTouch = 0;
+    @Getter @Setter short efficiency = 0;
+    @Getter @Setter short knockback = 0;
+    @Getter @Setter short sweeping = 0;
+    @Getter @Setter @Shadow private int transferCooldown;
+
+    @Shadow public abstract double getHopperX();
+
+    @Shadow public abstract double getHopperY();
+
+    @Shadow public abstract double getHopperZ();
 
     @Inject(method = "readNbt", at = @At("HEAD"))
     public void readNbt(NbtCompound tag, CallbackInfo info) {
@@ -141,4 +160,8 @@ public abstract class HopperBlockEntityMixin extends LockableContainerBlockEntit
     public void writeNbt(NbtCompound tag, CallbackInfo info) {
         saveEnchantments(tag);
     }
+
+    @Override public double getPosX() { return this.getHopperX(); }
+    @Override public double getPosY() { return this.getHopperY(); }
+    @Override public double getPosZ() { return this.getHopperZ(); }
 }

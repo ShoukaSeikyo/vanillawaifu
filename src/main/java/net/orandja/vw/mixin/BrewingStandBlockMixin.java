@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.loot.context.LootContext;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.orandja.vw.logic2.EnchantedBrewingStand;
+import net.orandja.vw.logic.EnchantedBrewingStand;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

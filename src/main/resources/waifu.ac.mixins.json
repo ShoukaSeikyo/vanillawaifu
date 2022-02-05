@@ -5,11 +5,8 @@
   "mixins": [
     "CraftingInventoryAccessor",
     "CraftingScreenHandlerAccessor",
-    "DispenserBlockEntityAccessor",
     "PlayerScreenHandlerAccessor",
-    "RecipeManagerAccessor",
     "ScreenHandlerAccessor",
-    "DefaultedListAccessor",
     "ItemFrameEntityAccessor"
   ],
   "client": [

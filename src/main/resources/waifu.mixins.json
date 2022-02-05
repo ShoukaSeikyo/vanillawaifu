@@ -5,59 +5,39 @@
   "mixins": [
     "AbstractFurnaceBlockEntityMixin",
     "AbstractFurnaceBlockMixin",
-
     "AnimalEntityMixin",
-
+    "BarrelBlockEntityMixin",
+    "BarrelBlockMixin",
     "BatEntityMixin",
-
     "BrewingStandBlockEntityMixin",
     "BrewingStandBlockMixin",
-
     "BucketItemMixin",
-
     "ChestBlockEntityMixin",
     "ChestBlockMixin",
-
     "CropBlockMixin",
-
+    "DamageTrackerMixin",
+    "DispenserBlockEntityMixin",
     "DispenserBlockMixin",
-
     "EnchantmentMixin",
-
     "ExplosionMixin",
-
     "GrindstoneScreenHandlerMixin",
-
+    "HandledScreenMixin",
     "HoeItemMixin",
-
     "HopperBlockEntityMixin",
     "HopperBlockMixin",
-
     "KelpPlantBlockMixin",
-
-    "PillarBlockMixin",
-
-    "PlayerEntityMixin",
-
-    "SchoolingFishEntityMixin",
-
-    "ServerPlayerEntityMixin",
-
-    "ServerWorldMixin",
-
-    "ShulkerBoxBlockEntityMixin",
-    "ShulkerBoxBlockMixin",
-
-    "PickaxeItemMixin",
-    "ShovelItemMixin",
-
-    "DamageTrackerMixin",
-
     "MobSpawnerLogicMixin",
-    "ExperienceOrbEntityMixin",
-
-    "BarrelBlockEntityMixin",
-    "BarrelBlockMixin"
+    "PickaxeItemMixin",
+    "PillarBlockMixin",
+    "PlayerEntityMixin",
+    "SchoolingFishEntityMixin",
+    "ServerPlayerEntityMixin",
+    "ServerWorldMixin",
+    "ShapedRecipeSerializerMixin",
+    "ShapelessRecipeSerializerMixin",
+    "ShovelItemMixin",
+    "ShulkerBoxBlockEntityMixin",
+    "ShulkerBoxBlockMixin"
   ],
   "client": [
   ],

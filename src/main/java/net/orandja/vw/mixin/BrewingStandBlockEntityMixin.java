@@ -4,10 +4,12 @@ import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BrewingStandBlockEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.orandja.vw.logic2.EnchantedBrewingStand;
+import net.orandja.vw.logic.EnchantedBrewingStand;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -21,6 +23,7 @@ public abstract class BrewingStandBlockEntityMixin implements EnchantedBrewingSt
 
     @Shadow @Getter @Setter int brewTime;
     @Shadow @Getter @Setter int fuel;
+    @Shadow @Getter @Setter private DefaultedList<ItemStack> inventory;
     @Getter @Setter short baneOfArthropods = 0;
     @Getter @Setter short efficiency = 0;
     @Getter @Setter short unbreaking = 0;

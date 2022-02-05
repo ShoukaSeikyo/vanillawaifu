@@ -8,11 +8,11 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.orandja.vw.logic.DoubleAxeLogic;
+import net.orandja.vw.logic.DoubleTool;
 import org.spongepowered.asm.mixin.Mixin;
 
 @Mixin(PillarBlock.class)
-public abstract class PillarBlockMixin extends Block implements DoubleAxeLogic {
+public abstract class PillarBlockMixin extends Block implements DoubleTool {
 
     public PillarBlockMixin(Settings settings) {
         super(settings);

@@ -1,79 +1,73 @@
 package net.orandja.vw.mixin;
 
+import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.screen.GrindstoneScreenHandler;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.slot.Slot;
-import net.orandja.vw.crafting.TransferEnchantOutputSlot;
+import net.orandja.vw.logic.TransferEnchant;
+import net.orandja.vw.logic.TransferEnchantOutputSlot;
 import org.jetbrains.annotations.Nullable;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(GrindstoneScreenHandler.class)
-public abstract class GrindstoneScreenHandlerMixin extends ScreenHandler {
+public abstract class GrindstoneScreenHandlerMixin extends ScreenHandler implements TransferEnchant {
     protected GrindstoneScreenHandlerMixin(@Nullable ScreenHandlerType<?> type, int syncId) {
         super(type, syncId);
     }
 
-    @Shadow
-    Inventory input;
-
-    @Shadow
-    Inventory result;
-
-    TransferEnchantOutputSlot outputSlot;
-
-    PlayerInventory playerInventory;
+    @Final @Shadow @Getter Inventory input;
+    @Final @Shadow @Getter private Inventory result;
+    @Getter @Setter TransferEnchantOutputSlot outputSlot;
+    @Getter @Setter PlayerInventory playerInventory;
+    @Final @Getter @Shadow private ScreenHandlerContext context;
 
     @Inject(at = @At("RETURN"), method = "<init>(ILnet/minecraft/entity/player/PlayerInventory;Lnet/minecraft/screen/ScreenHandlerContext;)V")
     public void init(int syncId, PlayerInventory playerInventory, final ScreenHandlerContext context, CallbackInfo info) {
-        this.playerInventory = playerInventory;
-
-        this.replaceSlot(new Slot(this.input, 0, 49, 19) {
-            public boolean canInsert(ItemStack stack) {
-                return stack.isDamageable() || stack.isOf(Items.ENCHANTED_BOOK) || stack.hasEnchantments() || stack.isOf(Items.BOOK);
-            }
-        }, 0);
-
-        this.replaceSlot(new Slot(this.input, 1, 49, 40) {
-            public boolean canInsert(ItemStack stack) {
-                return stack.isDamageable() || stack.isOf(Items.ENCHANTED_BOOK) || stack.hasEnchantments() || stack.isOf(Items.BOOK);
-            }
-        }, 1);
-
-        this.replaceSlot(outputSlot = new TransferEnchantOutputSlot(input, result, context), 2);
+        onInit(syncId, playerInventory, context);
     }
 
-    public void replaceSlot(Slot slot, int id) {
-        slot.id = id;
-        this.slots.set(id, slot);
-    }
+//    @Redirect(method = "<init>(ILnet/minecraft/entity/player/PlayerInventory;Lnet/minecraft/screen/ScreenHandlerContext;)V", at = @At(value = "NEW", target = "Lnet/minecraft/screen/slot/Slot;<init>(Lnet/minecraft/inventory/Inventory;III)V"))
+//    public Slot onSlotAdd(Inventory inventory, int index, int x, int y) {
+//        return changeSlot(inventory, index, x, y);
+//    }
+
+//    @Redirect(method = "<init>(ILnet/minecraft/entity/player/PlayerInventory;Lnet/minecraft/screen/ScreenHandlerContext;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/GrindstoneScreenHandler;addSlot(Lnet/minecraft/screen/slot/Slot;)Lnet/minecraft/screen/slot/Slot;"))
+//    public Slot changeAddSlot_0(GrindstoneScreenHandler instance, Slot slot) {
+//        return this.addSlot(changeSlot(slot.inventory, slot.getIndex(), slot.x, slot.y));
+//    }
+//    @Redirect(method = "<init>(ILnet/minecraft/entity/player/PlayerInventory;Lnet/minecraft/screen/ScreenHandlerContext;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/GrindstoneScreenHandler;addSlot(Lnet/minecraft/screen/slot/Slot;)Lnet/minecraft/screen/slot/Slot;", ordinal = 1))
+//    public Slot changeAddSlot_1(GrindstoneScreenHandler instance, Slot slot) {
+//        return changeSlot(this.input, 1, 49, 40);
+//    }
+//    @Redirect(method = "<init>(ILnet/minecraft/entity/player/PlayerInventory;Lnet/minecraft/screen/ScreenHandlerContext;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/GrindstoneScreenHandler;addSlot(Lnet/minecraft/screen/slot/Slot;)Lnet/minecraft/screen/slot/Slot;", ordinal = 2))
+//    public Slot changeAddSlot_2(GrindstoneScreenHandler instance, Slot slot) {
+//        return changeSlot(this.result, 2, 129, 34);
+//    }
 
     @Inject(at = @At("HEAD"), method = "updateResult", cancellable = true)
     public void updateResult(CallbackInfo info) {
-        outputSlot.getBookAndToolSlots((bookSlot, toolSlot) -> {
-            if(this.playerInventory.player.experienceLevel < TransferEnchantOutputSlot.Companion.getCost()) {
-                this.result.setStack(0, ItemStack.EMPTY);
-            } else {
-                ItemStack outputStack = new ItemStack(Items.ENCHANTED_BOOK, 1);
-                ItemStack toolStack = input.getStack(toolSlot);
+        updateTransferResult(info);
+    }
 
-                outputStack.getOrCreateNbt().put("StoredEnchantments", toolStack.getNbt().get("Enchantments"));
-                this.result.setStack(0, outputStack);
-            }
+    @Override
+    public void updateContents() {
+        this.sendContentUpdates();
+    }
 
-            this.sendContentUpdates();
-            info.cancel();
-
-            return false;
-        });
+    @Override
+    public void replaceSlot(Slot slot, int id) {
+        slot.id = id;
+        this.slots.set(id, slot);
     }
 }

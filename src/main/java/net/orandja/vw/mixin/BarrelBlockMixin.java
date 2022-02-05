@@ -11,8 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.loot.context.LootContext;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.orandja.vw.crafting.BarrelBlockEntityTickerKt;
-import net.orandja.vw.logic2.BlockWithEnchantment;
+import net.orandja.vw.logic.DeepBarrelBlock;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -21,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.List;
 
 @Mixin(BarrelBlock.class)
-public abstract class BarrelBlockMixin extends BlockWithEntity implements BlockWithEnchantment {
+public abstract class BarrelBlockMixin extends BlockWithEntity implements DeepBarrelBlock {
 
     protected BarrelBlockMixin(Settings settings) {
         super(settings);
@@ -38,6 +37,6 @@ public abstract class BarrelBlockMixin extends BlockWithEntity implements BlockW
     }
 
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-        return checkType(type, BlockEntityType.BARREL, BarrelBlockEntityTickerKt::tick);
+        return checkType(type, BlockEntityType.BARREL, Companion::tick);
     }
 }

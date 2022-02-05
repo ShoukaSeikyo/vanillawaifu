@@ -11,7 +11,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.orandja.vw.logic.FurnaceEntityLogic;
+import net.orandja.vw.logic.EnchantedFurnaceBlock;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -21,7 +21,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(AbstractFurnaceBlockEntity.class)
-public abstract class AbstractFurnaceBlockEntityMixin extends LockableContainerBlockEntity implements FurnaceEntityLogic {
+public abstract class AbstractFurnaceBlockEntityMixin extends LockableContainerBlockEntity implements EnchantedFurnaceBlock {
     protected AbstractFurnaceBlockEntityMixin(BlockEntityType<?> blockEntityType, BlockPos blockPos, BlockState blockState) {
         super(blockEntityType, blockPos, blockState);
     }
@@ -55,21 +55,21 @@ public abstract class AbstractFurnaceBlockEntityMixin extends LockableContainerB
 
     @Redirect(method = "tick", at = @At(value = "FIELD", opcode = Opcodes.PUTFIELD, ordinal = 0, target = "Lnet/minecraft/block/entity/AbstractFurnaceBlockEntity;burnTime:I"))
     private static void decreaseBurnTime(AbstractFurnaceBlockEntity entity, int ignored) {
-        FurnaceEntityLogic.Companion.decreaseBurnTime(entity);
+        EnchantedFurnaceBlock.Companion.decreaseBurnTime(entity);
     }
 
     @Redirect(method = "tick", at = @At(value = "FIELD", opcode = Opcodes.PUTFIELD, ordinal = 1, target = "Lnet/minecraft/block/entity/AbstractFurnaceBlockEntity;burnTime:I"))
     private static void setBurnTime(AbstractFurnaceBlockEntity entity, int burnTime) {
-        FurnaceEntityLogic.Companion.setBurnTime(entity, burnTime);
+        EnchantedFurnaceBlock.Companion.setBurnTime(entity, burnTime);
     }
 
     @Inject(method = "tick", at = @At(value = "FIELD", shift = At.Shift.AFTER, ordinal = 1, target = "Lnet/minecraft/block/entity/AbstractFurnaceBlockEntity;cookTime:I"))
     private static void accelerateCookTime(World world, BlockPos pos, BlockState state, AbstractFurnaceBlockEntity entity, CallbackInfo info) {
-        FurnaceEntityLogic.Companion.accelerateCookTime(entity);
+        EnchantedFurnaceBlock.Companion.accelerateCookTime(entity);
     }
 
     @Inject(method = "tick", at = @At(value = "INVOKE", shift = At.Shift.AFTER, target = "Lnet/minecraft/block/entity/AbstractFurnaceBlockEntity;setLastRecipe(Lnet/minecraft/recipe/Recipe;)V"))
     private static void increaseOutputAmount(World world, BlockPos pos, BlockState state, AbstractFurnaceBlockEntity entity, CallbackInfo info) {
-        FurnaceEntityLogic.Companion.increaseOutputAmount(entity, world);
+        EnchantedFurnaceBlock.Companion.increaseOutputAmount(entity, world);
     }
 }

@@ -11,7 +11,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.orandja.vw.logic2.WhitelistedChestBlock;
+import net.orandja.vw.logic.WhitelistedChestBlock;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -23,12 +23,12 @@ public abstract class ChestBlockMixin implements WhitelistedChestBlock {
 
     @Inject(at = @At("HEAD"), method = "onUse", cancellable = true)
     void onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> info) {
-        this.onBlockUse(state, world, pos, player, hand, hit, info);
+        this.onBlockUse(world, pos, player, info);
     }
 
     @Inject(at = @At("RETURN"), method = "onPlaced")
     void onPlaced(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack, CallbackInfo info) {
-        this.onBlockPlaced(world, pos, state, placer, stack, info);
+        this.onBlockPlaced(world, pos, stack, info);
     }
 
     @Inject(method = "getPlacementState", at = @At("RETURN"), cancellable = true)

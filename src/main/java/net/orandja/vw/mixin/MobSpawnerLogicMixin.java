@@ -2,7 +2,6 @@ package net.orandja.vw.mixin;
 
 import lombok.Getter;
 import lombok.Setter;
-import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.MobSpawnerLogic;
