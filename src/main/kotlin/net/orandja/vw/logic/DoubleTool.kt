@@ -23,6 +23,24 @@ import java.util.function.Consumer
 
 
 interface DoubleTool {
+
+    fun dropStacks(
+        blockEntity: BlockEntity?,
+        world: World,
+        player: PlayerEntity,
+        pos: BlockPos,
+        state: BlockState,
+        stack: ItemStack,
+        count: Int) {
+        if (world is ServerWorld) {
+            Block.getDroppedStacks(state, world, pos, blockEntity, player, stack).forEach {
+                it.increment(count)
+                Block.dropStack(world, pos, it)
+            }
+            state.onStacksDropped(world, pos, stack)
+        }
+    }
+
     fun useDoubleAxe(
         block: Block,
         blockEntity: BlockEntity?,
@@ -49,15 +67,14 @@ interface DoubleTool {
                 player.addExhaustion(0.005f)
                 world.setBlockState(it, Blocks.AIR.defaultState, 2)
                 count++
+
+                if(count >= 64) {
+                    dropStacks(blockEntity, world, player, pos, state, stack, count)
+                    count = 0
+                }
             }
 
-            if (world is ServerWorld) {
-                Block.getDroppedStacks(state, world, pos, blockEntity, player, stack).forEach {
-                    it.increment(count)
-                    Block.dropStack(world, pos, it)
-                }
-                state.onStacksDropped(world, pos, stack)
-            }
+            dropStacks(blockEntity, world, player, pos, state, stack, count)
             return false
         }
 
@@ -260,6 +277,7 @@ enum class DoubleToolMode(
                 DoubleTool.AXE_ADJASCENTS_ZONE.get(
                     world,
                     pos,
+                    iterateMax = 128,
                     repeat = {
                         world.getBlockState(it).isWood(state) to it
                     },
