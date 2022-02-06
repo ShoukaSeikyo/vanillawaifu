@@ -6,13 +6,11 @@ import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.Hopper
 import net.minecraft.block.entity.HopperBlockEntity
 import net.minecraft.enchantment.Enchantments
-import net.minecraft.entity.ItemEntity
 import net.minecraft.inventory.Inventories
 import net.minecraft.inventory.Inventory
 import net.minecraft.inventory.SidedInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
-import net.minecraft.predicate.entity.EntityPredicates
 import net.minecraft.util.collection.DefaultedList
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Box
@@ -22,9 +20,7 @@ import net.orandja.mcutils.canMerge
 import net.orandja.vw.logic.EnchantMore.Companion.addBasic
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable
 import java.util.function.BooleanSupplier
-import java.util.function.Function
 import java.util.stream.IntStream
-import java.util.stream.Stream
 import kotlin.math.ceil
 import kotlin.math.max
 
@@ -245,12 +241,11 @@ interface EnchantedHopper: BlockWithEnchantment, Inventory, ProtectBlock {
             return boxes
         }
 
-        fun offsetItemZone(hopper: Hopper): Double {
+        fun offsetCollectZone(box: Box, hopper: Hopper): Box {
             if(hopper is EnchantedHopper && hopper.knockback > 0) {
-                return ceil(hopper.hopperY) - 0.5 + (hopper.knockback * 1.0)
+                return Box(box.minX, ceil(box.minY), box.minZ, box.maxX, box.maxY, box.maxZ).offset(hopper.hopperX - 0.5, hopper.hopperY - 0.5 + (hopper.knockback * 1.0), hopper.hopperZ - 0.5)
             }
-
-            return hopper.hopperY - 0.5
+            return box.offset(hopper.hopperX - 0.5, hopper.hopperY - 0.5, hopper.hopperZ - 0.5)
         }
     }
 }

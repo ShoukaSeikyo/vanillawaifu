@@ -7,7 +7,7 @@ import net.minecraft.util.registry.RegistryKey
 import net.minecraft.world.World
 import java.io.*
 
-class ExtraSaveData {
+interface ExtraSaveData {
     companion object {
 
         val CLEAR: HashMap<String, () -> Unit> = HashMap()
@@ -25,6 +25,7 @@ class ExtraSaveData {
                     val dataInputStream = DataInputStream(pushbackInputStream)
                     loadedCompound = NbtIo.readCompressed(pushbackInputStream)
                     dataInputStream.close()
+                    pushbackInputStream.close()
                 } catch (e: Exception) {
                     pushbackInputStream?.close()
                     e.printStackTrace()
@@ -35,28 +36,12 @@ class ExtraSaveData {
             }
         }
 
-        @JvmStatic
-        fun load(registryKey: RegistryKey<World>) {
-            if (registryKey !== World.OVERWORLD) {
-                return
-            }
-
-            if (loadedCompound == null) {
-                readNbt()
-            }
-            val dataCompound = loadedCompound!!.getCompound("data")
-            LOAD.forEach { entry ->
-                if (dataCompound.contains(entry.key))
-                    entry.value.invoke(dataCompound.getCompound(entry.key))
-            }
-        }
-
         fun onLoad(name: String, consumer: (NbtCompound) -> Unit) {
             LOAD[name] = consumer
             if (loadedCompound != null) {
                 val dataCompound = loadedCompound!!.getCompound("data")
                 if (dataCompound.contains(name))
-                    consumer.invoke(dataCompound.getCompound(name))
+                    consumer(dataCompound.getCompound(name))
             }
         }
 
@@ -72,26 +57,38 @@ class ExtraSaveData {
             SAVE[name] = consumer
         }
 
-        @JvmStatic
-        fun save(registryKey: RegistryKey<World>) {
-            if (registryKey !== World.OVERWORLD) {
-                return
-            }
-            val mainCompound = NbtCompound()
-            mainCompound.put("data", NbtCompound().apply {
-                SAVE.forEach { entry ->
-                    put(entry.key, entry.value.invoke())
-                }
-            })
-            @Suppress("DEPRECATION")
-            mainCompound.putInt("DataVersion", SharedConstants.getGameVersion().worldVersion)
-
-            try {
-                NbtIo.writeCompressed(mainCompound, file)
-            } catch (var4: IOException) {
-            }
-
-            loadedCompound = mainCompound
+    }
+    fun load(registryKey: RegistryKey<World>) {
+        if (registryKey !== World.OVERWORLD) {
+            return
         }
+
+        if (loadedCompound == null) {
+            readNbt()
+        }
+        val dataCompound = loadedCompound!!.getCompound("data")
+        LOAD.forEach {
+            if (dataCompound.contains(it.key))
+                it.value(dataCompound.getCompound(it.key))
+        }
+    }
+
+    fun save(registryKey: RegistryKey<World>) {
+        if (registryKey !== World.OVERWORLD) {
+            return
+        }
+        val mainCompound = NbtCompound()
+        mainCompound.put("data", NbtCompound().apply {
+            SAVE.forEach { put(it.key, it.value()) }
+        })
+        @Suppress("DEPRECATION")
+        mainCompound.putInt("DataVersion", SharedConstants.getGameVersion().worldVersion)
+
+        try {
+            NbtIo.writeCompressed(mainCompound, file)
+        } catch (var4: IOException) {
+        }
+
+        loadedCompound = mainCompound
     }
 }

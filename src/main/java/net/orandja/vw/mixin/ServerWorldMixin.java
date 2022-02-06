@@ -24,7 +24,7 @@ import java.util.concurrent.Executor;
 import java.util.function.Supplier;
 
 @Mixin(ServerWorld.class)
-abstract class ServerWorldMixin extends World implements StructureWorldAccess {
+abstract class ServerWorldMixin extends World implements StructureWorldAccess, ExtraSaveData {
 
     protected ServerWorldMixin(MutableWorldProperties properties, RegistryKey<World> registryRef, DimensionType dimensionType, Supplier<Profiler> profiler, boolean isClient, boolean debugWorld, long seed) {
         super(properties, registryRef, dimensionType, profiler, isClient, debugWorld, seed);
@@ -33,12 +33,12 @@ abstract class ServerWorldMixin extends World implements StructureWorldAccess {
     @Inject(at = @At("RETURN"),
         method = "<init>(Lnet/minecraft/server/MinecraftServer;Ljava/util/concurrent/Executor;Lnet/minecraft/world/level/storage/LevelStorage$Session;Lnet/minecraft/world/level/ServerWorldProperties;Lnet/minecraft/util/registry/RegistryKey;Lnet/minecraft/world/dimension/DimensionType;Lnet/minecraft/server/WorldGenerationProgressListener;Lnet/minecraft/world/gen/chunk/ChunkGenerator;ZJLjava/util/List;Z)V")
     private void init(MinecraftServer server, Executor workerExecutor, LevelStorage.Session session, ServerWorldProperties properties, RegistryKey<World> registryKey, DimensionType dimensionType, WorldGenerationProgressListener worldGenerationProgressListener, ChunkGenerator chunkGenerator, boolean debugWorld, long l, List<Spawner> list, boolean bl, CallbackInfo info) {
-        ExtraSaveData.load(registryKey);
+        load(registryKey);
     }
 
     @Inject(method = "saveLevel", at = @At("RETURN"))
     void saveLevel(CallbackInfo info) {
-        ExtraSaveData.save(getRegistryKey());
+        save(getRegistryKey());
     }
 
 }

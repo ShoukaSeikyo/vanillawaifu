@@ -306,7 +306,7 @@ class BlockZone(private val xRange: IntRange, private val zRange: IntRange, priv
     fun get(
         world: World,
         origin: BlockPos,
-        iterateMax: Int = 16,
+        iterateMax: Int = 32,
         iterate: Int = 0,
         repeat: (origin: BlockPos) -> Pair<Boolean, BlockPos?> = { false to null },
         validated: MutableMap<BlockPos, Boolean> = mutableMapOf(),

@@ -77,7 +77,7 @@ public abstract class HopperBlockEntityMixin extends LockableContainerBlockEntit
 
     @Redirect(method = "getInputItemEntities", at = @At(value = "INVOKE", target = "Ljava/util/stream/Stream;flatMap(Ljava/util/function/Function;)Ljava/util/stream/Stream;"))
     private static Stream<? super Box> offsetItemZone(Stream<Box> instance, Function<Box, Stream<ItemEntity>> function, World world, Hopper hopper) {
-        return instance.flatMap(box -> world.getEntitiesByClass(ItemEntity.class, box.offset(hopper.getHopperX() - 0.5, Companion.offsetItemZone(hopper), hopper.getHopperZ() - 0.5), EntityPredicates.VALID_ENTITY).stream());
+        return instance.flatMap(box -> world.getEntitiesByClass(ItemEntity.class, Companion.offsetCollectZone(box, hopper), EntityPredicates.VALID_ENTITY).stream());
     }
 
     @Shadow
