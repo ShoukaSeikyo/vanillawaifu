@@ -17,6 +17,7 @@ public abstract class CropBlockMixin extends PlantBlock {
         super(settings);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void onStacksDropped(BlockState state, ServerWorld world, BlockPos pos, ItemStack stack) {
         super.onStacksDropped(state, world, pos, stack);

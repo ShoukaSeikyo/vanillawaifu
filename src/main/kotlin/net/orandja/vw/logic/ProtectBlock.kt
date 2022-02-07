@@ -26,7 +26,7 @@ interface ProtectBlock {
         return preventsExtract(world, BlockPos(x, y, z))
     }
 
-    val world: World
+    val world: World?
     @Suppress("PLATFORM_CLASS_MAPPED_TO_KOTLIN")
     var affectedBlocks: java.util.List<BlockPos>
 
@@ -35,7 +35,7 @@ interface ProtectBlock {
     }
 
     fun onExplosion() {
-        val newBlocks = affectedBlocks.filter { canExplode(world, it) }.toList()
+        val newBlocks = affectedBlocks.filter { world != null && canExplode(world!!, it) }.toList()
         affectedBlocks.clear()
         affectedBlocks.addAll(newBlocks)
     }

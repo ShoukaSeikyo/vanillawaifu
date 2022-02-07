@@ -37,6 +37,7 @@ abstract class ShulkerBoxBlockMixin extends BlockWithEntity implements CloudShul
 
     @Inject(at = @At("HEAD"), method = "getDroppedStacks", cancellable = true)
     public void getDroppedStacks(BlockState state, LootContext.Builder builder, CallbackInfoReturnable<List<ItemStack>> info) {
+        //noinspection deprecation
         checkCloud(super::getDroppedStacks, state, builder, info);
     }
 }

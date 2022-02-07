@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.*;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
@@ -26,9 +27,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
 import java.util.function.BooleanSupplier;
-import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 @Mixin(value = HopperBlockEntity.class, priority = 1001)
 public abstract class HopperBlockEntityMixin extends LockableContainerBlockEntity implements EnchantedHopper {
@@ -77,22 +77,30 @@ public abstract class HopperBlockEntityMixin extends LockableContainerBlockEntit
         return Companion.expandSweeping(instance.getBoundingBoxes(), world, hopper);
     }
 
-    @Redirect(method = "getInputItemEntities", at = @At(value = "INVOKE", target = "Ljava/util/stream/Stream;flatMap(Ljava/util/function/Function;)Ljava/util/stream/Stream;"))
-    private static Stream<? super Box> offsetItemZone(Stream<Box> instance, Function<Box, Stream<ItemEntity>> function, World world, Hopper hopper) {
-        return instance.flatMap(box -> world.getEntitiesByClass(ItemEntity.class, Companion.offsetCollectZone(box, hopper), EntityPredicates.VALID_ENTITY).stream());
+    @Inject(method = "getInputItemEntities", at = @At("HEAD"), cancellable = true)
+    private static void knockbackInputEntites(World world, Hopper instance, CallbackInfoReturnable<List<ItemEntity>> info) {
+        if(instance instanceof EnchantedHopper hopper && hopper.getKnockback() > 0) {
+            info.setReturnValue(Companion.inputZones(instance).getBoundingBoxes().stream().flatMap(box -> world.getEntitiesByClass(ItemEntity.class, Companion.offsetCollectZone(box, instance), EntityPredicates.VALID_ENTITY).stream()).collect(Collectors.toList()));
+        }
+    }
+
+    @Inject(method = "onEntityCollided", at = @At("HEAD"), cancellable = true)
+    private static void onEntityCollided(World world, BlockPos pos, BlockState state, Entity entity, HopperBlockEntity blockEntity, CallbackInfo info) {
+        if(blockEntity instanceof EnchantedHopper hopper && hopper.getKnockback() > 0) {
+            info.cancel();
+        }
     }
 
 
     @Override public Inventory getOutInventory(@NotNull World world, @NotNull BlockPos pos, @NotNull BlockState state) {return getOutputInventory(world, pos, state);}
 
-    @Override public boolean isInvFull(Inventory inventory, Direction direction) {return isInventoryFull(inventory, direction);}
+    @Override public boolean isInvFull(@NotNull Inventory inventory, @NotNull Direction direction) {return isInventoryFull(inventory, direction);}
 
-    @Override public @NotNull IntStream getOutputAvailableSlots(Inventory inventory, Direction side) {return getAvailableSlots(inventory, side);}
+    @Override public @NotNull IntStream getOutputAvailableSlots(@NotNull Inventory inventory, @NotNull Direction side) {return getAvailableSlots(inventory, side);}
 
     @Shadow private static native Inventory getOutputInventory(World world, BlockPos pos, BlockState state);
     @Shadow private static native boolean isInventoryFull(Inventory inventory, Direction direction);
     @Shadow private static native IntStream getAvailableSlots(Inventory inventory, Direction side);
-    @Shadow private static native Inventory getInventoryAt(World world, double x, double y, double z);
 
     @Shadow private native boolean isFull();
 
@@ -100,7 +108,7 @@ public abstract class HopperBlockEntityMixin extends LockableContainerBlockEntit
 
     @Override public boolean isHopperEmpty() {return isEmpty();}
 
-    @Override public void markHopperDirty(World world, BlockPos pos, BlockState state) {markDirty(world, pos, state);}
+    @Override public void markHopperDirty(@NotNull World world, @NotNull BlockPos pos, @NotNull BlockState state) {markDirty(world, pos, state);}
 
     @Shadow private native void setCooldown(int cooldown);
 

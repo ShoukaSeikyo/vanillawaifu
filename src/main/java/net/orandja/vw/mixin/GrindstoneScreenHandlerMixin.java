@@ -37,24 +37,6 @@ public abstract class GrindstoneScreenHandlerMixin extends ScreenHandler impleme
         onInit(syncId, playerInventory, context);
     }
 
-//    @Redirect(method = "<init>(ILnet/minecraft/entity/player/PlayerInventory;Lnet/minecraft/screen/ScreenHandlerContext;)V", at = @At(value = "NEW", target = "Lnet/minecraft/screen/slot/Slot;<init>(Lnet/minecraft/inventory/Inventory;III)V"))
-//    public Slot onSlotAdd(Inventory inventory, int index, int x, int y) {
-//        return changeSlot(inventory, index, x, y);
-//    }
-
-//    @Redirect(method = "<init>(ILnet/minecraft/entity/player/PlayerInventory;Lnet/minecraft/screen/ScreenHandlerContext;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/GrindstoneScreenHandler;addSlot(Lnet/minecraft/screen/slot/Slot;)Lnet/minecraft/screen/slot/Slot;"))
-//    public Slot changeAddSlot_0(GrindstoneScreenHandler instance, Slot slot) {
-//        return this.addSlot(changeSlot(slot.inventory, slot.getIndex(), slot.x, slot.y));
-//    }
-//    @Redirect(method = "<init>(ILnet/minecraft/entity/player/PlayerInventory;Lnet/minecraft/screen/ScreenHandlerContext;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/GrindstoneScreenHandler;addSlot(Lnet/minecraft/screen/slot/Slot;)Lnet/minecraft/screen/slot/Slot;", ordinal = 1))
-//    public Slot changeAddSlot_1(GrindstoneScreenHandler instance, Slot slot) {
-//        return changeSlot(this.input, 1, 49, 40);
-//    }
-//    @Redirect(method = "<init>(ILnet/minecraft/entity/player/PlayerInventory;Lnet/minecraft/screen/ScreenHandlerContext;)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/GrindstoneScreenHandler;addSlot(Lnet/minecraft/screen/slot/Slot;)Lnet/minecraft/screen/slot/Slot;", ordinal = 2))
-//    public Slot changeAddSlot_2(GrindstoneScreenHandler instance, Slot slot) {
-//        return changeSlot(this.result, 2, 129, 34);
-//    }
-
     @Inject(at = @At("HEAD"), method = "updateResult", cancellable = true)
     public void updateResult(CallbackInfo info) {
         updateTransferResult(info);

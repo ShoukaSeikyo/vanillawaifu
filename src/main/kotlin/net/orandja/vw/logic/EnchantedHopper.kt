@@ -15,6 +15,7 @@ import net.minecraft.util.collection.DefaultedList
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Box
 import net.minecraft.util.math.Direction
+import net.minecraft.util.shape.VoxelShape
 import net.minecraft.world.World
 import net.orandja.mcutils.canMerge
 import net.orandja.vw.logic.EnchantMore.Companion.addBasic
@@ -252,6 +253,13 @@ interface EnchantedHopper: BlockWithEnchantment, Inventory, ProtectBlock {
 
         fun setAddOffset(hopper: Hopper, value: Boolean) {
             (hopper as? EnchantedHopper)?.addOffset = value
+        }
+
+        fun inputZones(hopper: Hopper): VoxelShape {
+            if(hopper is EnchantedHopper && hopper.knockback > 0) {
+                return Hopper.ABOVE_SHAPE
+            }
+            return hopper.inputAreaShape
         }
     }
 }

@@ -28,6 +28,7 @@ public abstract class AbstractFurnaceBlockMixin extends BlockWithEntity implemen
         onBlockPlaced(world, pos, state, placer, stack, info);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public List<ItemStack> getDroppedStacks(BlockState state, LootContext.Builder builder) {
         return enchantDrops(super.getDroppedStacks(state, builder), state, builder);
