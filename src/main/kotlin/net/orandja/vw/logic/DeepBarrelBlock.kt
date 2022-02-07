@@ -31,7 +31,9 @@ import java.util.function.Consumer
 
 class DeepStorageSlot(inventory: Inventory, val inventoryIndex: Int, index: Int, x: Int, y: Int) : Slot(inventory, index, x, y) {
     override fun canInsert(stack: ItemStack): Boolean {
+//        println("${this.inventory.getStack(0).isEmpty} || ${stack.isEmpty} || ${this.inventory.getStack(0).isItemEqual(stack)}")
         return this.inventory.getStack(0).isEmpty || this.inventory.getStack(0).isItemEqual(stack)
+//        return this.inventory.getStack(0).isCompatible(stack)
     }
 
     override fun getStack(): ItemStack {
@@ -117,6 +119,10 @@ class MovingInventory(
             return delegate.set(iIndex, element)
         }
     }
+
+    fun markDirty() {
+        this[0] = this[0];
+    }
 }
 
 interface DeepBarrelBlock : BlockWithEnchantment {
@@ -182,11 +188,15 @@ interface DeepBarrelBlock : BlockWithEnchantment {
     }
 
     fun isValidForBarrel(slot: Int, stack: ItemStack): Boolean {
-        return !this.hasEnchantments() || (Block.getBlockFromItem(stack.item) !is ShulkerBoxBlock && stack.isItemEqual(this.inventory[0]))
+        return !this.hasEnchantments() || (Block.getBlockFromItem(stack.item) !is ShulkerBoxBlock && (this.inventory[0].isEmpty || this.inventory[0].isItemEqual(stack)))
 //                areStacksCompatible(
 //            this.inventory[0],
 //            stack
 //        ))
+    }
+
+    fun onMarkDirty() {
+        (this.inventory as? MovingInventory)?.markDirty()
     }
 
     companion object {

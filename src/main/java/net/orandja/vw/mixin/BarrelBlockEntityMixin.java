@@ -55,4 +55,10 @@ public abstract class BarrelBlockEntityMixin extends LootableContainerBlockEntit
     protected void createScreenHandler(int syncId, PlayerInventory playerInventory, CallbackInfoReturnable<ScreenHandler> info) {
         this.createBarrelScreenHandler(this, syncId, playerInventory, info);
     }
+
+    @Override
+    public void markDirty() {
+        this.onMarkDirty();
+        super.markDirty();
+    }
 }
