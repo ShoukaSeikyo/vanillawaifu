@@ -31,7 +31,7 @@ import java.util.function.Consumer
 
 class DeepStorageSlot(inventory: Inventory, val inventoryIndex: Int, index: Int, x: Int, y: Int) : Slot(inventory, index, x, y) {
     override fun canInsert(stack: ItemStack): Boolean {
-        return this.inventory.getStack(0).isItemEqual(stack)
+        return this.inventory.getStack(0).isEmpty || this.inventory.getStack(0).isItemEqual(stack)
     }
 
     override fun getStack(): ItemStack {
