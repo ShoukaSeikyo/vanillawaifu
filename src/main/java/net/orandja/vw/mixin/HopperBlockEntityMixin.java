@@ -3,10 +3,7 @@ package net.orandja.vw.mixin;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.block.entity.Hopper;
-import net.minecraft.block.entity.HopperBlockEntity;
-import net.minecraft.block.entity.LockableContainerBlockEntity;
+import net.minecraft.block.entity.*;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
@@ -65,9 +62,14 @@ public abstract class HopperBlockEntityMixin extends LockableContainerBlockEntit
         return Companion.redstoneEnabled(world, pos, state, blockEntity, booleanSupplier);
     }
 
-    @ModifyConstant(method = "getInputInventory", constant = @Constant(doubleValue = 1.0))
-    private static double offsetKnockback(double constant, World world, Hopper hopper) {
-        return Companion.offsetKnockback(world, hopper);
+    @Getter @Setter private boolean addOffset = false;
+    @Inject(method = "extract(Lnet/minecraft/world/World;Lnet/minecraft/block/entity/Hopper;)Z", at = @At(value = "INVOKE", shift = At.Shift.BEFORE, target = "Lnet/minecraft/block/entity/HopperBlockEntity;getInputInventory(Lnet/minecraft/world/World;Lnet/minecraft/block/entity/Hopper;)Lnet/minecraft/inventory/Inventory;"))
+    private static void enableOffset(World world, Hopper hopper, CallbackInfoReturnable<Boolean> info) {
+        Companion.setAddOffset(hopper, true);
+    }
+    @Inject(method = "extract(Lnet/minecraft/world/World;Lnet/minecraft/block/entity/Hopper;)Z", at = @At(value = "INVOKE", shift = At.Shift.BEFORE, target = "Lnet/minecraft/block/entity/HopperBlockEntity;getInputItemEntities(Lnet/minecraft/world/World;Lnet/minecraft/block/entity/Hopper;)Ljava/util/List;"))
+    private static void disableOffset(World world, Hopper hopper, CallbackInfoReturnable<Boolean> info) {
+        Companion.setAddOffset(hopper, false);
     }
 
     @Redirect(method = "getInputItemEntities", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/shape/VoxelShape;getBoundingBoxes()Ljava/util/List;"))
@@ -80,63 +82,33 @@ public abstract class HopperBlockEntityMixin extends LockableContainerBlockEntit
         return instance.flatMap(box -> world.getEntitiesByClass(ItemEntity.class, Companion.offsetCollectZone(box, hopper), EntityPredicates.VALID_ENTITY).stream());
     }
 
-    @Shadow
-    private static native Inventory getOutputInventory(World world, BlockPos pos, BlockState state);
 
-    @Override
-    public Inventory getOutInventory(@NotNull World world, @NotNull BlockPos pos, @NotNull BlockState state) {
-        return getOutputInventory(world, pos, state);
-    }
+    @Override public Inventory getOutInventory(@NotNull World world, @NotNull BlockPos pos, @NotNull BlockState state) {return getOutputInventory(world, pos, state);}
 
-    @Shadow
-    private static native boolean isInventoryFull(Inventory inventory, Direction direction);
+    @Override public boolean isInvFull(Inventory inventory, Direction direction) {return isInventoryFull(inventory, direction);}
 
-    @Override
-    public boolean isInvFull(Inventory inventory, Direction direction) {
-        return isInventoryFull(inventory, direction);
-    }
+    @Override public @NotNull IntStream getOutputAvailableSlots(Inventory inventory, Direction side) {return getAvailableSlots(inventory, side);}
 
+    @Shadow private static native Inventory getOutputInventory(World world, BlockPos pos, BlockState state);
+    @Shadow private static native boolean isInventoryFull(Inventory inventory, Direction direction);
+    @Shadow private static native IntStream getAvailableSlots(Inventory inventory, Direction side);
+    @Shadow private static native Inventory getInventoryAt(World world, double x, double y, double z);
 
-    @Shadow
-    private static native IntStream getAvailableSlots(Inventory inventory, Direction side);
+    @Shadow private native boolean isFull();
 
-    public @NotNull IntStream getOutputAvailableSlots(Inventory inventory, Direction side) {
-        return getAvailableSlots(inventory, side);
-    }
+    @Override public boolean isHopperFull() {return isFull();}
 
-    @Shadow
-    private native boolean isFull();
+    @Override public boolean isHopperEmpty() {return isEmpty();}
 
-    @Override
-    public boolean isHopperFull() {
-        return isFull();
-    }
+    @Override public void markHopperDirty(World world, BlockPos pos, BlockState state) {markDirty(world, pos, state);}
 
-    @Override
-    public boolean isHopperEmpty() {
-        return isEmpty();
-    }
+    @Shadow private native void setCooldown(int cooldown);
 
-    @Override
-    public void markHopperDirty(World world, BlockPos pos, BlockState state) {
-        markDirty(world, pos, state);
-    }
+    @Override public void setHopperCooldown(int cooldown) {setCooldown(cooldown);}
 
-    @Shadow
-    private native void setCooldown(int cooldown);
+    @Shadow protected native DefaultedList<ItemStack> getInvStackList();
 
-    @Override
-    public void setHopperCooldown(int cooldown) {
-        setCooldown(cooldown);
-    }
-
-    @Shadow
-    protected native DefaultedList<ItemStack> getInvStackList();
-
-    @Override
-    public DefaultedList<ItemStack> getInvList() {
-        return getInvStackList();
-    }
+    @Override public DefaultedList<ItemStack> getInvList() {return getInvStackList();}
 
     @Getter @Setter short mending = 0;
     @Getter @Setter short silkTouch = 0;
@@ -148,6 +120,10 @@ public abstract class HopperBlockEntityMixin extends LockableContainerBlockEntit
     @Shadow public abstract double getHopperX();
 
     @Shadow public abstract double getHopperY();
+    @Inject(method = "getHopperY", at = @At("HEAD"), cancellable = true)
+    public void offsetHopperY(CallbackInfoReturnable<Double> info) {
+        info.setReturnValue((double)this.pos.getY() + 0.5 + (addOffset ? Companion.hopperOffset(this) : 0));
+    }
 
     @Shadow public abstract double getHopperZ();
 

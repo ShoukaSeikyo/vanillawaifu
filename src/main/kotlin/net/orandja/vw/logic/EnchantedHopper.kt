@@ -51,6 +51,7 @@ interface EnchantedHopper: BlockWithEnchantment, Inventory, ProtectBlock {
 
     var posX: Double
     var posY: Double
+    var addOffset: Boolean
     var posZ: Double
 
     override fun getEnchantments(): Map<String, Short> {
@@ -229,8 +230,9 @@ interface EnchantedHopper: BlockWithEnchantment, Inventory, ProtectBlock {
             return false
         }
 
-        fun offsetKnockback(world: World, hopper: Hopper): Double {
-            return if(hopper is EnchantedHopper && hopper.knockback > 0) (hopper.knockback * 1.0) + 1.0 else 1.0
+        fun hopperOffset(hopper: Any): Double {
+            return if(hopper is EnchantedHopper && hopper.knockback > 0) (hopper.knockback * 1.0) else 0.0
+//            return hopper.hopperY + if(hopper is EnchantedHopper && hopper.knockback > 0) (hopper.knockback * 1.0) else 0.0
         }
 
         fun expandSweeping(boxes: List<Box>, world: World, hopper: Hopper): List<Box> {
@@ -246,6 +248,10 @@ interface EnchantedHopper: BlockWithEnchantment, Inventory, ProtectBlock {
                 return Box(box.minX, ceil(box.minY), box.minZ, box.maxX, box.maxY, box.maxZ).offset(hopper.hopperX - 0.5, hopper.hopperY - 0.5 + (hopper.knockback * 1.0), hopper.hopperZ - 0.5)
             }
             return box.offset(hopper.hopperX - 0.5, hopper.hopperY - 0.5, hopper.hopperZ - 0.5)
+        }
+
+        fun setAddOffset(hopper: Hopper, value: Boolean) {
+            (hopper as? EnchantedHopper)?.addOffset = value
         }
     }
 }
