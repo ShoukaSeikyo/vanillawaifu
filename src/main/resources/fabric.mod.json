@@ -23,7 +23,7 @@
   },
   "mixins": [
     "waifu.comp.mixins.json",
-    "waifu.test.mixins.json",
+    "waifu.dev.mixins.json",
     "waifu.ac.mixins.json",
     "waifu.mixins.json"
   ],

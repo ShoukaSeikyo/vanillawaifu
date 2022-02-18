@@ -1,6 +1,7 @@
 package net.orandja.vw.logic
 
 import net.minecraft.block.BlockState
+import net.minecraft.block.BlockWithEntity
 import net.minecraft.enchantment.Enchantment
 import net.minecraft.entity.LivingEntity
 import net.minecraft.item.ItemStack
@@ -15,6 +16,8 @@ import net.orandja.mcutils.toNBTList
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo
 
 interface BlockWithEnchantment {
+
+    //BlockWithEntity
 
     fun getEnchantments(): Map<String, Short>
     fun hasEnchantments(): Boolean
@@ -36,7 +39,7 @@ interface BlockWithEnchantment {
     fun saveEnchantments(tag: NbtCompound) {
         if (this.hasEnchantments()) {
             tag.put("Enchantments", getEnchantments().filter(::validEnchant)
-                .map { entry -> toNBT(entry.key, entry.value) }
+                .map { toNBT(it.key, it.value) }
                 .toNBTList())
         }
     }
@@ -44,7 +47,10 @@ interface BlockWithEnchantment {
     fun onBlockPlaced(world: World, pos: BlockPos, state: BlockState, placer: LivingEntity, stack: ItemStack, info: CallbackInfo) {
         if (stack.nbt?.contains("Enchantments") == true) {
             (stack.nbt?.get("Enchantments") as NbtList).map(::fromNBT)
-                .forEach((world.getBlockEntity(pos) as BlockWithEnchantment)::applyEnchantments)
+                .forEach {
+                    if(state.block is BlockWithEntity)
+                        (world.getBlockEntity(pos) as BlockWithEnchantment).applyEnchantments(it)
+                }
         }
     }
 

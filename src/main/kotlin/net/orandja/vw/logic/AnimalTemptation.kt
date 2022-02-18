@@ -1,4 +1,4 @@
-package net.orandja.vw.dev
+package net.orandja.vw.logic
 
 import net.minecraft.entity.ItemEntity
 import net.minecraft.entity.ai.goal.Goal

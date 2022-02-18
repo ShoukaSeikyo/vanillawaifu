@@ -1,8 +1,9 @@
 {
   "required": true,
-  "package": "net.orandja.vw.testmixin",
+  "package": "net.orandja.vw.dev",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
+    "WorldMixin"
   ],
   "client": [
   ],
