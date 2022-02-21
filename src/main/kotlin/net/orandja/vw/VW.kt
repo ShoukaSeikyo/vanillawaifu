@@ -3,7 +3,6 @@ package net.orandja.vw
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import net.minecraft.server.MinecraftServer
-import net.orandja.vw.dev.*
 import net.orandja.vw.logic.*
 import java.util.concurrent.atomic.AtomicReference
 

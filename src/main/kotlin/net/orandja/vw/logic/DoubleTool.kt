@@ -120,22 +120,16 @@ interface DoubleTool {
                     }
                     if (block.isMature(nState!!)) {
                         toRemove.add(nPos!!)
-                        player.mainHandStack.damage(
-                            1,
-                            player
-                        ) { p: PlayerEntity -> p.sendToolBreakStatus(Hand.MAIN_HAND) }
-                        player.offHandStack.damage(
-                            1,
-                            player
-                        ) { p: PlayerEntity -> p.sendToolBreakStatus(Hand.OFF_HAND) }
+                        player.mainHandStack.damage(1, player) { p: PlayerEntity -> p.sendToolBreakStatus(Hand.MAIN_HAND) }
+                        player.offHandStack.damage(1, player) { p: PlayerEntity -> p.sendToolBreakStatus(Hand.OFF_HAND) }
                     }
                     i++
                 }
                 val dropMap = HashMap<Item, ItemStack>()
-                toRemove.forEach(Consumer { cropPos: BlockPos? ->
-                    world.setBlockState(cropPos, block.withAge(0), 2)
+                toRemove.forEach {
+                    world.setBlockState(it, block.withAge(0), 2)
                     Block.getDroppedStacks(state, world as ServerWorld, pos, null, player, mainTool)
-                        .forEach(Consumer { stack: ItemStack ->
+                        .forEach { stack: ItemStack ->
                             if (dropMap.containsKey(stack.item)) {
                                 val otherStack = dropMap[stack.item]
                                 var count = otherStack!!.count + stack.count
@@ -147,15 +141,17 @@ interface DoubleTool {
                                 stack.count = count
                             }
                             dropMap[stack.item] = stack
-                        })
-                })
-                ExperienceOrbEntity.spawn(
-                    world as ServerWorld,
-                    Vec3d(pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble()),
-                    toRemove.size - 1
-                )
-                dropMap.values.forEach(Consumer { stack: ItemStack? -> Block.dropStack(world, pos, stack) })
-                state.onStacksDropped(world, pos, mainTool)
+                        }
+                }
+                if(toRemove.size > 0) {
+                    ExperienceOrbEntity.spawn(
+                        world as ServerWorld,
+                        Vec3d(pos.x.toDouble(), pos.y.toDouble(), pos.z.toDouble()),
+                        toRemove.size - 1
+                    )
+                    dropMap.values.forEach { Block.dropStack(world, pos, it) }
+                    state.onStacksDropped(world, pos, mainTool)
+                }
 
                 info.returnValue = ActionResult.SUCCESS
                 return
