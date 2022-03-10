@@ -7,11 +7,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo
 interface NerfedEntity {
 
     var tickCooldown: Short
+    var mobDead: Boolean
 
     @Inject(at = [At("HEAD")], method = ["tick"], cancellable = true)
     fun nerf(callbackInfo: CallbackInfo) {
         tickCooldown--
-        if (tickCooldown > 0) {
+        if (tickCooldown > 0 && !this.mobDead) {
             callbackInfo.cancel()
             return
         }

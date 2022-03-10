@@ -30,7 +30,7 @@ class TransferEnchantSlot(inventory: Inventory, index: Int, x: Int, y: Int): Slo
 class TransferEnchantOutputSlot(var input: Inventory, var result: Inventory, var context: ScreenHandlerContext) : Slot(result, 2, 129, 34) {
 
     companion object {
-        var cost: Int = 30
+        var cost: Int = 8
         var destroyItem: Boolean = false
     }
 

@@ -1,11 +1,17 @@
 package net.orandja.vw.logic
 
+import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.inventory.CraftingInventory
 import net.minecraft.item.ItemStack
-import net.minecraft.recipe.Ingredient
-import net.minecraft.recipe.ShapedRecipe
-import net.minecraft.recipe.ShapelessRecipe
+import net.minecraft.recipe.*
 import net.minecraft.util.Identifier
 import net.minecraft.util.collection.DefaultedList
+
+interface CustomRecipeInterceptor {
+
+    fun onTakeItem(input: CraftingInventory, player: PlayerEntity, slot: Int, amount: Int): ItemStack
+
+}
 
 interface CustomRecipe {
 
@@ -22,6 +28,14 @@ interface CustomRecipe {
 
     fun createShapelessRecipe(identifier: Identifier, group: String, output: ItemStack, input: DefaultedList<Ingredient>): ShapelessRecipe {
         return customShapelessRecipes[identifier]?.invoke(identifier, group, output, input) ?: ShapelessRecipe(identifier, group, output, input)
+    }
+
+    fun interceptOnTakeItem(recipe: CraftingRecipe?, input: CraftingInventory, player: PlayerEntity, slot: Int, amount: Int): ItemStack {
+        if(recipe is CustomRecipeInterceptor) {
+            return recipe.onTakeItem(input, player, slot, amount)
+        }
+
+        return input.removeStack(slot, amount)
     }
 
 }

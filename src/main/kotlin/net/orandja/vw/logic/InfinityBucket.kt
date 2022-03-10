@@ -143,7 +143,23 @@ interface InfinityBucket {
             return ActionResult.success(world.isClient)
         }
 
-        fun handleEmptyInfinityBucket(stack: ItemStack, player: PlayerEntity, output: ItemStack): ItemStack {
+        fun handleFurnaceEmptyInfinityBucket(stack: Any?, player: PlayerEntity?, output: Any?): ItemStack {
+            stack as ItemStack
+            output as ItemStack
+
+            if (EnchantmentHelper.getLevel(Enchantments.INFINITY, stack) > 0) {
+                (player as? ServerPlayerEntity)?.networkHandler?.sendPacket(ScreenHandlerSlotUpdateS2CPacket(-2, 0, player.slotMainOrOffHand(stack), stack))
+                return stack
+            }
+
+            return output
+        }
+
+        fun ItemStack.isInfinityBucket(): Boolean {
+            return EnchantmentHelper.getLevel(Enchantments.INFINITY, this) > 0
+        }
+
+        fun handleEmptyInfinityBucket(stack: ItemStack, player: PlayerEntity?, output: ItemStack): ItemStack {
             if (EnchantmentHelper.getLevel(Enchantments.INFINITY, stack) > 0) {
                 (player as? ServerPlayerEntity)?.networkHandler?.sendPacket(ScreenHandlerSlotUpdateS2CPacket(-2, 0, player.slotMainOrOffHand(stack), stack))
                 return stack

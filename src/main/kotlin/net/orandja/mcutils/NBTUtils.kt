@@ -31,11 +31,11 @@ fun <N: NbtElement> NbtCompound.getOrCompute(id: String, getter: (String) -> N?,
     return value
 }
 
-fun <N: NbtElement> NbtCompound.getOrCreate(id: String, getter: (String) -> N?, compute: () -> N?): N? {
+fun <N: NbtElement> NbtCompound.getOrCreate(id: String, getter: (String) -> N?, compute: () -> N?): N {
     return if(this.contains(id))
-        getter(id)
+        getter(id)!!
     else
-        compute().apply { this@getOrCreate.put(id, this) }
+        compute().apply { this@getOrCreate.put(id, this) }!!
 }
 
 fun NbtCompound.getTagOrCompute(id: String, consumer: (NbtCompound) -> Unit): NbtCompound {

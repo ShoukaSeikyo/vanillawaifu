@@ -24,4 +24,9 @@ public abstract class BatEntityMixin extends AmbientEntity implements NerfedEnti
     protected void mobTick(CallbackInfo info) {
         nerf(info);
     }
+
+    @Override
+    public boolean getMobDead() {
+        return this.isDead();
+    }
 }

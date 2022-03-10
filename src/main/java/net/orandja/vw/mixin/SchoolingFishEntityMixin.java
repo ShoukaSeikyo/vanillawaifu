@@ -24,4 +24,9 @@ public abstract class SchoolingFishEntityMixin extends FishEntity implements Ner
     public void tick(CallbackInfo info) {
         nerf(info);
     }
+
+    @Override
+    public boolean getMobDead() {
+        return this.isDead();
+    }
 }

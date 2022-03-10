@@ -27,6 +27,7 @@ class VW : ModInitializer {
         EnchantedFurnaceBlock.beforeLaunch()
         EnchantedHopper.beforeLaunch()
         InfinityBucket.beforeLaunch()
+        ShoppingBarrel.beforeLaunch()
         WhitelistedChestBlock.beforeLaunch()
 
         ServerLifecycleEvents.SERVER_STARTED.register(serverReference::set)

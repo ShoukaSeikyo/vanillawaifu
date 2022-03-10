@@ -17,6 +17,7 @@ import net.minecraft.util.collection.DefaultedList
 import net.minecraft.util.math.*
 import net.minecraft.world.World
 import net.orandja.mcutils.canMerge
+import net.orandja.mcutils.mergeInto
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo
 
 class AutomatedCraftingInventory(private val width: Int, private val height: Int, stacks: List<ItemStack>) :
@@ -103,28 +104,16 @@ interface CraftingDispenserBlock {
         var craftedStack: ItemStack? = null
         val blockPointerImpl: BlockPointer = BlockPointerImpl(world, pos)
         if (outputInventory != null) {
-            val recipeOutput = craftingRecipe.output.copy()
-            for (i in 0 until outputInventory.size()) {
-                if(outputInventory.isValid(i, recipeOutput)) {
-                    val outputStack = outputInventory.getStack(i)
-                    if (outputStack.isEmpty) {
-                        craftedStack = craftingRecipe.craft(inventory)
-                        outputInventory.setStack(i, craftedStack)
-                        break
-                    } else if (outputStack.canMerge(recipeOutput, recipeOutput.count)) {
-                        craftedStack = craftingRecipe.craft(inventory)
-                        outputStack.increment(craftedStack.count)
-                        break
-                    }
-                }
-            }
+            craftingRecipe.output.copy().mergeInto(outputInventory) { craftingRecipe.craft(inventory) }
         } else {
             craftedStack = craftingRecipe.craft(inventory)
             BEHAVIOR.dispense(blockPointerImpl, craftedStack)
         }
+
         if (craftedStack == null) {
             return
         }
+
         val defaultedList = world.recipeManager.getRemainingStacks(RecipeType.CRAFTING, inventory, world)
 
         for (i in defaultedList.indices) {
