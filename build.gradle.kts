@@ -21,19 +21,22 @@ java {
 }
 
 dependencies {
-    minecraft("com.mojang:minecraft:1.18.1")
-    mappings("net.fabricmc:yarn:1.18.1+build.4:v2")
+    minecraft("com.mojang:minecraft:1.18.2")
+    mappings("net.fabricmc:yarn:1.18.2+build.2:v2")
 
     implementation(gradleApi())
-    implementation("com.google.code.gson:gson:2.8.9")
+    implementation("com.google.code.gson:gson:2.9.0")
 
-    modImplementation("net.fabricmc:fabric-loader:0.12.11")
-    modImplementation("net.fabricmc.fabric-api:fabric-api:0.44.0+1.18")
+    modImplementation("net.fabricmc:fabric-loader:0.13.3")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:0.50.0+1.18.2")
 
-    modImplementation("net.fabricmc:fabric-language-kotlin:1.6.1+kotlin.1.5.10")
+    modImplementation("net.fabricmc:fabric-language-kotlin:1.7.2+kotlin.1.6.20")
 
     compileOnly ("org.projectlombok:lombok:1.18.22")
     annotationProcessor ("org.projectlombok:lombok:1.18.22")
+}
+repositories {
+    mavenCentral()
 }
 
 val compileKotlin: KotlinCompile by tasks

@@ -42,7 +42,7 @@ public abstract class HopperBlockEntityMixin extends LockableContainerBlockEntit
         Companion.preventExtraction(world, hopper, info);
     }
 
-    @Inject(method = "insertAndExtract", at = @At(value = "INVOKE", shift = At.Shift.AFTER, target = "Lnet/minecraft/block/entity/HopperBlockEntity;setCooldown(I)V"))
+    @Inject(method = "insertAndExtract", at = @At(value = "INVOKE", shift = At.Shift.AFTER, target = "Lnet/minecraft/block/entity/HopperBlockEntity;setTransferCooldown(I)V"))
     private static void insertAndExtract(World world, BlockPos pos, BlockState state, HopperBlockEntity blockEntity, BooleanSupplier booleanSupplier, CallbackInfoReturnable<Boolean> info) {
         Companion.reduceCooldown(blockEntity);
     }
@@ -110,9 +110,9 @@ public abstract class HopperBlockEntityMixin extends LockableContainerBlockEntit
 
     @Override public void markHopperDirty(@NotNull World world, @NotNull BlockPos pos, @NotNull BlockState state) {markDirty(world, pos, state);}
 
-    @Shadow private native void setCooldown(int cooldown);
+    @Shadow public native void setTransferCooldown(int cooldown);
 
-    @Override public void setHopperCooldown(int cooldown) {setCooldown(cooldown);}
+    @Override public void setHopperCooldown(int cooldown) {setTransferCooldown(cooldown);}
 
     @Shadow protected native DefaultedList<ItemStack> getInvStackList();
 
@@ -123,7 +123,7 @@ public abstract class HopperBlockEntityMixin extends LockableContainerBlockEntit
     @Getter @Setter short efficiency = 0;
     @Getter @Setter short knockback = 0;
     @Getter @Setter short sweeping = 0;
-    @Getter @Setter @Shadow private int transferCooldown;
+    @Getter @Shadow private int transferCooldown;
 
     @Shadow public abstract double getHopperX();
 

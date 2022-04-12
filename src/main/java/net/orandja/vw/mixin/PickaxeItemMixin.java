@@ -8,6 +8,7 @@ import net.minecraft.item.MiningToolItem;
 import net.minecraft.item.PickaxeItem;
 import net.minecraft.item.ToolMaterial;
 import net.minecraft.tag.Tag;
+import net.minecraft.tag.TagKey;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.orandja.vw.logic.DoubleTool;
@@ -16,7 +17,7 @@ import org.spongepowered.asm.mixin.Mixin;
 @Mixin(PickaxeItem.class)
 public abstract class PickaxeItemMixin extends MiningToolItem implements DoubleTool {
 
-    protected PickaxeItemMixin(float attackDamage, float attackSpeed, ToolMaterial material, Tag<Block> effectiveBlocks, Settings settings) {
+    protected PickaxeItemMixin(float attackDamage, float attackSpeed, ToolMaterial material, TagKey<Block> effectiveBlocks, Settings settings) {
         super(attackDamage, attackSpeed, material, effectiveBlocks, settings);
     }
 
