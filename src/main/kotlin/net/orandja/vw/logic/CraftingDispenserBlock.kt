@@ -101,17 +101,17 @@ interface CraftingDispenserBlock {
 
         val craftingRecipe = optional.get()
         val outputInventory = HopperBlockEntity.getInventoryAt(world, outputPos)
-        var craftedStack: ItemStack? = null
+        val craftedStack: ItemStack? = craftingRecipe.craft(inventory)
         val blockPointerImpl: BlockPointer = BlockPointerImpl(world, pos)
-        if (outputInventory != null) {
-            craftingRecipe.output.copy().mergeInto(outputInventory) { craftingRecipe.craft(inventory) }
-        } else {
-            craftedStack = craftingRecipe.craft(inventory)
-            BEHAVIOR.dispense(blockPointerImpl, craftedStack)
-        }
 
         if (craftedStack == null) {
             return
+        }
+
+        if (outputInventory != null) {
+            craftingRecipe.output.copy().mergeInto(outputInventory) { craftedStack }
+        } else {
+            BEHAVIOR.dispense(blockPointerImpl, craftedStack)
         }
 
         val defaultedList = world.recipeManager.getRemainingStacks(RecipeType.CRAFTING, inventory, world)
