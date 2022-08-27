@@ -1,5 +1,6 @@
 package net.orandja.vw.mixin;
 
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.util.math.BlockPos;
@@ -19,7 +20,7 @@ import java.util.List;
 abstract class ExplosionMixin implements ProtectBlock {
 
     @Final @Shadow @Getter private World world;
-    @Final @Shadow @Getter @Setter private List<BlockPos> affectedBlocks;
+    @Final @Shadow @Getter @Setter private ObjectArrayList<BlockPos> affectedBlocks;
 
     @Inject(method = "affectWorld", at = @At("HEAD"))
     void affectWorld(boolean particles, CallbackInfo info) {

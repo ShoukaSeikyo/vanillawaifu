@@ -11,8 +11,8 @@ buildscript {
 
 plugins {
 //    kotlin("jvm") version "1.4.31"
-    id("org.jetbrains.kotlin.jvm") version "1.5.31"
-    id("fabric-loom") version "0.11-SNAPSHOT"
+    id("org.jetbrains.kotlin.jvm") version "1.7.10"
+    id("fabric-loom") version "0.12-SNAPSHOT"
     `kotlin-dsl`
 }
 
@@ -21,16 +21,16 @@ java {
 }
 
 dependencies {
-    minecraft("com.mojang:minecraft:1.18.2")
-    mappings("net.fabricmc:yarn:1.18.2+build.2:v2")
+    minecraft("com.mojang:minecraft:1.19.2")
+    mappings("net.fabricmc:yarn:1.19.2+build.4:v2")
 
     implementation(gradleApi())
     implementation("com.google.code.gson:gson:2.9.0")
 
-    modImplementation("net.fabricmc:fabric-loader:0.13.3")
-    modImplementation("net.fabricmc.fabric-api:fabric-api:0.50.0+1.18.2")
+    modImplementation("net.fabricmc:fabric-loader:0.14.9")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:0.60.0+1.19.2")
 
-    modImplementation("net.fabricmc:fabric-language-kotlin:1.7.2+kotlin.1.6.20")
+    modImplementation("net.fabricmc:fabric-language-kotlin:1.8.2+kotlin.1.7.10")
 
     compileOnly ("org.projectlombok:lombok:1.18.22")
     annotationProcessor ("org.projectlombok:lombok:1.18.22")

@@ -5,11 +5,13 @@ import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
+import net.minecraft.network.encryption.PlayerPublicKey;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.orandja.vw.logic.DoubleTool;
 import net.orandja.vw.logic.DoubleToolMode;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 
 import java.util.HashMap;
@@ -19,7 +21,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity implements Do
 
     @Getter @Setter HashMap<Item, DoubleToolMode> toolModes = new HashMap<>();
 
-    public ServerPlayerEntityMixin(World world, BlockPos pos, float yaw, GameProfile profile) {
-        super(world, pos, yaw, profile);
+    public ServerPlayerEntityMixin(World world, BlockPos pos, float yaw, GameProfile gameProfile, @Nullable PlayerPublicKey publicKey) {
+        super(world, pos, yaw, gameProfile, publicKey);
     }
 }

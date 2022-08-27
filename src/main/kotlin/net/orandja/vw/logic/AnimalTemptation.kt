@@ -11,7 +11,6 @@ import net.minecraft.predicate.entity.EntityPredicates
 import net.minecraft.world.World
 import java.util.*
 import java.util.function.Predicate
-import kotlin.collections.HashMap
 import kotlin.math.abs
 import kotlin.reflect.KClass
 import kotlin.reflect.full.isSubclassOf
@@ -38,7 +37,7 @@ interface AnimalTemptation {
             TEMPTATIONS[ChickenEntity::class] = { Pair(10, TemptItemGoal(it, 1.25, (it as ChickenEntity)::isBreedingItem)) }
             TEMPTATIONS[CowEntity::class] = { Pair(3, TemptItemGoal(it, 1.25, (it as CowEntity)::isBreedingItem)) }
             TEMPTATIONS[FoxEntity::class] = { Pair(3, TemptItemGoal(it, 1.25, (it as FoxEntity)::isBreedingItem)) }
-            TEMPTATIONS[HorseBaseEntity::class] = { Pair(4, TemptItemGoal(it, 1.25, (it as HorseBaseEntity)::isBreedingItem)) }
+            TEMPTATIONS[AbstractHorseEntity::class] = { Pair(4, TemptItemGoal(it, 1.25, (it as AbstractHorseEntity)::isBreedingItem)) }
             TEMPTATIONS[LlamaEntity::class] = { Pair(4, TemptItemGoal(it, 1.25, (it as LlamaEntity)::isBreedingItem)) }
             TEMPTATIONS[OcelotEntity::class] = { Pair(3, TemptItemGoal(it, 1.25, (it as OcelotEntity)::isBreedingItem)) }
             TEMPTATIONS[PigEntity::class] = { Pair(4, TemptItemGoal(it, 1.25, (it as PigEntity)::isBreedingItem)) }

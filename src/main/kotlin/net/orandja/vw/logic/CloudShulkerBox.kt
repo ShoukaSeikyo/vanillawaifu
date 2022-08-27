@@ -254,7 +254,7 @@ class CloudBoxRecipe(identifier: Identifier, group: String, output: ItemStack, i
 
     override fun matches(craftingInventory: CraftingInventory, world: World?): Boolean {
         return super.matches(craftingInventory, world) && craftingInventory.toArray().find {
-            Block.getBlockFromItem(it.item) is ShulkerBoxBlock && it.hasCustomName() && it.name.asString().length > 2 &&
+            Block.getBlockFromItem(it.item) is ShulkerBoxBlock && it.hasCustomName() && it.name.string.length > 2 &&
                     !it.nbt!!.contains("vw_channel") &&
                     (!it.nbt!!.contains("BlockEntityTag") || !it.nbt!!.getCompound("BlockEntityTag").contains("Items") || it.nbt!!.getCompound("BlockEntityTag").getList("Items", 10).size == 0)
         } != null
@@ -263,7 +263,7 @@ class CloudBoxRecipe(identifier: Identifier, group: String, output: ItemStack, i
     override fun craft(craftingInventory: CraftingInventory): ItemStack? {
         val output = craftingInventory.toArray().firstOrNull { stack -> Block.getBlockFromItem(stack.item) is ShulkerBoxBlock && stack.hasCustomName() }?.copy() ?: return ItemStack.EMPTY
 
-        var channel = output.name.asString()
+        var channel = output.name.string
         var channelLiteral: String
         if (channel.startsWith(":", true)) {
             val player = craftingInventory.getPlayer() ?: return output

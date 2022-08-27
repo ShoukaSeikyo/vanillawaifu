@@ -10,7 +10,7 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.*
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.stat.Stats
-import net.minecraft.text.LiteralText
+import net.minecraft.text.Text
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
 import net.minecraft.util.math.BlockPos
@@ -37,7 +37,7 @@ interface DoubleTool {
                 it.increment(count)
                 Block.dropStack(world, pos, it)
             }
-            state.onStacksDropped(world, pos, stack)
+            state.onStacksDropped(world, pos, stack, true)
         }
     }
 
@@ -150,7 +150,7 @@ interface DoubleTool {
                         toRemove.size - 1
                     )
                     dropMap.values.forEach { Block.dropStack(world, pos, it) }
-                    state.onStacksDropped(world, pos, mainTool)
+                    state.onStacksDropped(world, pos, mainTool, true)
                 }
 
                 info.returnValue = ActionResult.SUCCESS
@@ -301,7 +301,7 @@ enum class DoubleToolMode(
     }
 
     fun sendToPlayer(player: PlayerEntity) {
-        player.sendMessage(LiteralText("Set tool mode to: $name"), true)
+        player.sendMessage(Text.of("Set tool mode to: $name"), true)
     }
 }
 

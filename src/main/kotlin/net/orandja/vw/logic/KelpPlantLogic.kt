@@ -26,7 +26,7 @@ interface KelpPlantLogic {
                 }
                 Block.dropStack(world, pos, itemStack)
             }
-            state.onStacksDropped(world, pos, stack)
+            state.onStacksDropped(world, pos, stack, true)
         }
     }
 

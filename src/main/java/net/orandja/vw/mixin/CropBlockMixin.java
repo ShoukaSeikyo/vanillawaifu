@@ -19,9 +19,10 @@ public abstract class CropBlockMixin extends PlantBlock {
 
     @SuppressWarnings("deprecation")
     @Override
-    public void onStacksDropped(BlockState state, ServerWorld world, BlockPos pos, ItemStack stack) {
-        super.onStacksDropped(state, world, pos, stack);
-        ExperienceOrbEntity.spawn(world, new Vec3d(pos.getX(), pos.getY(), pos.getZ()), 1);
+    public void onStacksDropped(BlockState state, ServerWorld world, BlockPos pos, ItemStack stack, boolean dropExperience) {
+        super.onStacksDropped(state, world, pos, stack, dropExperience);
+        if(dropExperience)
+            ExperienceOrbEntity.spawn(world, new Vec3d(pos.getX(), pos.getY(), pos.getZ()), 1);
     }
 
 }

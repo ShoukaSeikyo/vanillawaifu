@@ -180,7 +180,7 @@ class WhitelistedChestRecipe(id: Identifier, group: String, output: ItemStack, i
                         lore
                     } as NbtList
 
-                    list.add(NbtString.of("""{"text":"— ${player.name.asString()}","color":"green"}"""))
+                    list.add(NbtString.of("""{"text":"— ${player.name.string}","color":"green"}"""))
                 }
             }
 
