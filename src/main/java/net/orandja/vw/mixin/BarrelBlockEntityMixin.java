@@ -12,7 +12,9 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.village.TradeOfferList;
 import net.orandja.vw.logic.DeepBarrelBlock;
+import net.orandja.vw.logic.ShoppingBarrel;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -20,12 +22,15 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+@SuppressWarnings("unused")
 @Mixin(BarrelBlockEntity.class)
-public abstract class BarrelBlockEntityMixin extends LootableContainerBlockEntity implements DeepBarrelBlock {
+public abstract class BarrelBlockEntityMixin extends LootableContainerBlockEntity implements DeepBarrelBlock, ShoppingBarrel {
 
     @Getter @Setter short infinity = 0;
     @Getter @Setter short efficiency = 0;
     @Shadow @Getter @Setter private DefaultedList<ItemStack> inventory;
+
+    @Getter @Setter TradeOfferList offers;
 
     protected BarrelBlockEntityMixin(BlockEntityType<?> blockEntityType, BlockPos blockPos, BlockState blockState) {
         super(blockEntityType, blockPos, blockState);
@@ -33,11 +38,13 @@ public abstract class BarrelBlockEntityMixin extends LootableContainerBlockEntit
 
     @Inject(method = "readNbt", at = @At("HEAD"), cancellable = true)
     public void readNbt(NbtCompound tag, CallbackInfo info) {
+        this.loadShop(tag);
         this.loadEnchantments(tag, info, super::readNbt);
     }
 
     @Inject(method = "writeNbt", at = @At("HEAD"), cancellable = true)
     public void writeNbt(NbtCompound tag, CallbackInfo info) {
+        this.saveShop(tag);
         this.saveEnchantments(tag, info, super::writeNbt);
     }
 

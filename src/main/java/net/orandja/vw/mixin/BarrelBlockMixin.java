@@ -19,8 +19,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.List;
 
+@SuppressWarnings("unused")
 @Mixin(BarrelBlock.class)
-public abstract class BarrelBlockMixin extends BlockWithEntity implements DeepBarrelBlock {
+public abstract class BarrelBlockMixin extends BlockWithEntity implements DeepBarrelBlock
+//        , ShoppingBarrel
+{
 
     protected BarrelBlockMixin(Settings settings) {
         super(settings);
@@ -29,7 +32,14 @@ public abstract class BarrelBlockMixin extends BlockWithEntity implements DeepBa
     @Inject(method = "onPlaced", at = @At("RETURN"))
     public void onPlaced(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack, CallbackInfo info) {
         onBlockPlaced(world, pos, state, placer, stack, info);
+//        onShoppingPlaced(world, pos, state, placer, stack, info);
     }
+
+
+//    @Inject(method = "onUse", at = @At("HEAD"), cancellable = true)
+//    public void onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit, CallbackInfoReturnable<ActionResult> info) {
+//        onShopUse(state, world, pos, player, hand, hit, info);
+//    }
 
     @SuppressWarnings("deprecation")
     @Override
@@ -38,6 +48,6 @@ public abstract class BarrelBlockMixin extends BlockWithEntity implements DeepBa
     }
 
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-        return checkType(type, BlockEntityType.BARREL, Companion::tick);
+        return checkType(type, BlockEntityType.BARREL, DeepBarrelBlock.Companion::tick);
     }
 }

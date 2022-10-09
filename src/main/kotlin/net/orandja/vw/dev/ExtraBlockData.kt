@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package net.orandja.vw.dev
 
 import net.minecraft.nbt.NbtCompound
@@ -9,7 +11,6 @@ interface WorldChunkRegistryData {
 }
 
 interface ExtraBlockData {
-
     fun toNBT(tag: NbtCompound)
     fun fromNBT(tag: NbtCompound)
 

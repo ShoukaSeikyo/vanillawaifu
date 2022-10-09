@@ -11,7 +11,6 @@ interface HigherEnchantmentLevels {
             Enchantments.EFFICIENCY to 10,
             Enchantments.MENDING to 5,
             Enchantments.UNBREAKING to 10,
-
         )
 
     }
@@ -19,5 +18,4 @@ interface HigherEnchantmentLevels {
     fun getMaxLevel(enchantment: Enchantment): Int {
         return enchantmentsMaxLevels[enchantment] ?: enchantment.maxLevel
     }
-
 }

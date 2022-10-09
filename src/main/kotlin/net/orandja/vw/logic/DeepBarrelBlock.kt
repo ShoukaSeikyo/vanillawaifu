@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package net.orandja.vw.logic
 
 import net.minecraft.block.BarrelBlock
@@ -48,7 +50,7 @@ class DeepStorageSlot(inventory: Inventory, val inventoryIndex: Int, index: Int,
     }
 }
 
-class DeepStorageScreenHandler(syncId: Int, playerInventory: PlayerInventory, val inventory: Inventory) : ScreenHandler(ScreenHandlerType.GENERIC_9X3, syncId) {
+class DeepStorageScreenHandler(syncId: Int, playerInventory: PlayerInventory, val inventory: Inventory) : ScreenHandler(ScreenHandlerType.GENERIC_9X6, syncId) {
 
     override fun canUse(player: PlayerEntity): Boolean {
         return inventory.canPlayerUse(player)
@@ -62,11 +64,11 @@ class DeepStorageScreenHandler(syncId: Int, playerInventory: PlayerInventory, va
 
         val itemStack2 = slot.stack
         val itemStack = itemStack2.copy()
-        if (index < 27) {
-            if (!insertItem(itemStack2, 27, slots.size, true)) {
+        if (index < 54) {
+            if (!insertItem(itemStack2, 54, slots.size, true)) {
                 return ItemStack.EMPTY
             }
-        } else if (!insertItem(itemStack2, 0, 27, false)) {
+        } else if (!insertItem(itemStack2, 0, 54, false)) {
             return ItemStack.EMPTY
         }
 
@@ -81,11 +83,12 @@ class DeepStorageScreenHandler(syncId: Int, playerInventory: PlayerInventory, va
     }
 
     init {
-        checkSize(inventory, 27)
+        checkSize(inventory, 54)
         inventory.onOpen(playerInventory.player)
 
-        grid(9, 2) { x, y -> addSlot(DeepStorageSlot(inventory, x + (y * 9), x + (y * 9), 8 + x * 18, 18 + y * 18)) }
+        grid(9, 5) { x, y -> addSlot(DeepStorageSlot(inventory, x + (y * 9), x + (y * 9), 8 + x * 18, 18 + y * 18)) }
         grid(9) { x, _ -> addSlot(DeepStorageSlot(inventory, (inventory.size() - 9) + x, x + 18, 8 + x * 18, 18 + (2 * 18))) }
+
         grid(9, 3) { x, y -> addSlot(Slot(playerInventory, x + y * 9 + 9, 8 + x * 18, 84 + y * 18)) }
         grid(9) { x, _ -> addSlot(Slot(playerInventory, x, 8 + x * 18, 142)) }
     }
@@ -119,7 +122,7 @@ class MovingInventory(
     }
 
     fun markDirty() {
-        this[0] = this[0];
+        this[0] = this[0]
     }
 }
 
@@ -229,7 +232,7 @@ interface DeepBarrelBlock : BlockWithEnchantment {
 
                 when (enchantment) {
                     Enchantments.INFINITY -> return@addComplex true
-                    Enchantments.EFFICIENCY -> return@addComplex EnchantmentHelper.getLevel(Enchantments.INFINITY, stack) > 0 && stack.hasEnchantments();
+                    Enchantments.EFFICIENCY -> return@addComplex EnchantmentHelper.getLevel(Enchantments.INFINITY, stack) > 0 && stack.hasEnchantments()
                 }
 
                 return@addComplex false
