@@ -16,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 
+@SuppressWarnings("unused")
 @Mixin(KelpPlantBlock.class)
 public abstract class KelpPlantBlockMixin extends AbstractPlantBlock implements FluidFillable, KelpPlantLogic {
     protected KelpPlantBlockMixin(Settings settings, Direction direction, VoxelShape voxelShape, boolean bl) {

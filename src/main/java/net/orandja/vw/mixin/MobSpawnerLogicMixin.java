@@ -12,6 +12,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
+@SuppressWarnings("unused")
 @Mixin(MobSpawnerLogic.class)
 public abstract class MobSpawnerLogicMixin implements MobSpawnerMixinLogic {
 

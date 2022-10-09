@@ -11,6 +11,7 @@ import net.minecraft.world.World;
 import net.orandja.vw.logic.DoubleTool;
 import org.spongepowered.asm.mixin.Mixin;
 
+@SuppressWarnings("unused")
 @Mixin(PillarBlock.class)
 public abstract class PillarBlockMixin extends Block implements DoubleTool {
 

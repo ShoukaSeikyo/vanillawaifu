@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package net.orandja.vw
 
 import net.minecraft.SharedConstants
@@ -7,6 +9,7 @@ import net.minecraft.util.registry.RegistryKey
 import net.minecraft.world.World
 import java.io.*
 
+@SuppressWarnings("unused")
 interface ExtraSaveData {
     companion object {
 
@@ -86,7 +89,8 @@ interface ExtraSaveData {
 
         try {
             NbtIo.writeCompressed(mainCompound, file)
-        } catch (var4: IOException) {
+        } catch (e: IOException) {
+            e.printStackTrace()
         }
 
         loadedCompound = mainCompound

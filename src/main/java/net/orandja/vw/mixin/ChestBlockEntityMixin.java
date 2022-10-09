@@ -13,6 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.ArrayList;
 
+@SuppressWarnings("unused")
 @Mixin(ChestBlockEntity.class)
 public abstract class ChestBlockEntityMixin implements WhitelistedChestBlock {
 

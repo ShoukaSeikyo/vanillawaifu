@@ -169,7 +169,7 @@ class WhitelistedChestRecipe(id: Identifier, group: String, output: ItemStack, i
 
             chestOutput.orCreateNbt.apply {
                 val whitelist =
-                    this.getOrCreate("whitelist", { this.getList(it, 8) }, ::NbtList) ?: return ItemStack.EMPTY
+                    this.getOrCreate("whitelist", { this.getList(it, 8) }, ::NbtList)
                 if (whitelist.map(NbtElement::asString).find(player.uuidAsString::equals) == null) {
                     whitelist.add(NbtString.of(player.uuidAsString))
 
