@@ -19,6 +19,7 @@ import net.minecraft.util.shape.VoxelShape
 import net.minecraft.world.World
 import net.orandja.mcutils.canMerge
 import net.orandja.vw.logic.EnchantMore.Companion.addBasic
+import net.orandja.vw.mods.ProtectBlock.ProtectBlock
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable
 import java.util.function.BooleanSupplier
 import java.util.stream.IntStream

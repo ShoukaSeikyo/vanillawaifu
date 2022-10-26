@@ -9,6 +9,7 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.MathHelper
 import net.minecraft.world.World
 import net.orandja.vw.logic.EnchantMore.Companion.addBasic
+import net.orandja.vw.mods.ProtectBlock.ProtectBlock
 import kotlin.math.max
 
 interface EnchantedBrewingStand : BlockWithEnchantment {

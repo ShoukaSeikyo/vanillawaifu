@@ -6,7 +6,6 @@ import net.minecraft.enchantment.Enchantments
 interface HigherEnchantmentLevels {
 
     companion object {
-
         val enchantmentsMaxLevels: Map<Enchantment, Int> = mapOf(
             Enchantments.EFFICIENCY to 10,
             Enchantments.MENDING to 5,
