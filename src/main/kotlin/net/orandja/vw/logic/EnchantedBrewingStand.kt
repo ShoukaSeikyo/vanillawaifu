@@ -8,7 +8,8 @@ import net.minecraft.util.collection.DefaultedList
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.MathHelper
 import net.minecraft.world.World
-import net.orandja.vw.logic.EnchantMore.Companion.addBasic
+import net.orandja.vw.mods.BlockWithEnchantment.BlockWithEnchantment
+import net.orandja.vw.mods.EnchantMore.EnchantMore
 import net.orandja.vw.mods.ProtectBlock.ProtectBlock
 import kotlin.math.max
 
@@ -37,7 +38,7 @@ interface EnchantedBrewingStand : BlockWithEnchantment {
         return baneOfArthropods > 0 || efficiency > 0 || unbreaking > 0 || fireAspect > 0 || silkTouch > 0
     }
 
-    override fun applyEnchantments(name: String, level: Short) {
+    override fun applyEnchantment(name: String, level: Short) {
         when (name) {
             "bane_of_arthropods" -> baneOfArthropods = level
             "efficiency" -> efficiency = level
@@ -75,8 +76,8 @@ interface EnchantedBrewingStand : BlockWithEnchantment {
         }
 
         fun beforeLaunch() {
-            addBasic(
-                item = Items.BREWING_STAND,
+            EnchantMore.addBasic(
+                Items.BREWING_STAND,
                 Enchantments.BANE_OF_ARTHROPODS,
                 Enchantments.EFFICIENCY,
                 Enchantments.FIRE_ASPECT,

@@ -18,6 +18,7 @@ import net.minecraft.util.math.Direction
 import net.minecraft.util.math.Vec3d
 import net.minecraft.world.World
 import net.orandja.mcutils.*
+import net.orandja.vw.InventoryInteract
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable
 import java.util.function.Consumer
 
@@ -222,15 +223,15 @@ interface DoubleTool {
         )
 
         fun beforeLaunch() {
-            val pickaxeValidModes = arrayOf(DoubleToolMode.ALL, DoubleToolMode.SIMILAR, DoubleToolMode.VEIN)
-            InventoryMiddleClick.onMiddleClick.add(
-                { stack: ItemStack -> stack.item is PickaxeItem } to { stack, player -> (player as? DoubleTool)?.setNextToolMode(stack, pickaxeValidModes)?.sendToPlayer(player) }
-            )
-
-            val shovelValidModes = arrayOf(DoubleToolMode.ALL, DoubleToolMode.SIMILAR)
-            InventoryMiddleClick.onMiddleClick.add(
-                { stack: ItemStack -> stack.item is ShovelItem } to { stack, player -> (player as? DoubleTool)?.setNextToolMode(stack, shovelValidModes)?.sendToPlayer(player) }
-            )
+//            val pickaxeValidModes = arrayOf(DoubleToolMode.ALL, DoubleToolMode.SIMILAR, DoubleToolMode.VEIN)
+//            InventoryInteract.onMiddleClick.add(
+//                net.minecraft.util.Pair({ stack: ItemStack -> stack.item is PickaxeItem }, { stack, player -> (player as? DoubleTool)?.setNextToolMode(stack, pickaxeValidModes)?.sendToPlayer(player) })
+//            )
+//
+//            val shovelValidModes = arrayOf(DoubleToolMode.ALL, DoubleToolMode.SIMILAR)
+//            InventoryInteract.onMiddleClick.add(
+//                { stack: ItemStack -> stack.item is ShovelItem } to { stack, player -> (player as? DoubleTool)?.setNextToolMode(stack, shovelValidModes)?.sendToPlayer(player) }
+//            )
         }
     }
 }

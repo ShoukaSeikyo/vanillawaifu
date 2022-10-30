@@ -26,7 +26,8 @@ import net.minecraft.util.math.Box
 import net.minecraft.world.World
 import net.orandja.mcutils.*
 import net.orandja.vw.accessor.ItemFrameEntityAccessor
-import net.orandja.vw.logic.EnchantMore.Companion.addComplex
+import net.orandja.vw.mods.BlockWithEnchantment.BlockWithEnchantment
+import net.orandja.vw.mods.EnchantMore.EnchantMore.addComplex
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable
 import java.util.function.Consumer
@@ -144,7 +145,7 @@ interface DeepBarrelBlock : BlockWithEnchantment {
         )
     }
 
-    override fun applyEnchantments(name: String, level: Short) {
+    override fun applyEnchantment(name: String, level: Short) {
         when (name) {
             "infinity" -> infinity = level
             "efficiency" -> efficiency = level
@@ -224,7 +225,7 @@ interface DeepBarrelBlock : BlockWithEnchantment {
 
         fun beforeLaunch() {
             addComplex(
-                item = Items.BARREL
+                Items.BARREL
             ) { enchantment, stack ->
                 if(stack.count > 1) {
                     return@addComplex false

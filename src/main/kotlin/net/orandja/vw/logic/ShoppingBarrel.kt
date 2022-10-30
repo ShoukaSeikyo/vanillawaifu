@@ -23,6 +23,7 @@ import net.minecraft.village.TradeOfferList
 import net.minecraft.world.World
 import net.orandja.mcutils.getOrCreate
 import net.orandja.mcutils.gridStack
+import net.orandja.vw.CustomRecipe
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable
 
@@ -30,7 +31,7 @@ private fun NbtCompound.getStack(key: String): ItemStack {
     return ItemStack.fromNbt(this.getCompound(key))
 }
 
-class ShoppingBarrelRecipe(identifier: Identifier?) : SpecialCraftingRecipe(identifier), CustomRecipeInterceptor {
+class ShoppingBarrelRecipe(identifier: Identifier?) : SpecialCraftingRecipe(identifier), CustomRecipe.Interceptor {
 
     private fun NbtCompound.compareOffer(other: NbtCompound): Boolean {
         return get("sell") == other.get("sell") &&

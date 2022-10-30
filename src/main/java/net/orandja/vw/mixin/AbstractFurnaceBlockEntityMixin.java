@@ -14,7 +14,6 @@ import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.orandja.vw.logic.EnchantedFurnaceBlock;
-import net.orandja.vw.logic.InfinityBucket;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -24,7 +23,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(AbstractFurnaceBlockEntity.class)
-public abstract class AbstractFurnaceBlockEntityMixin extends LockableContainerBlockEntity implements EnchantedFurnaceBlock, InfinityBucket {
+public abstract class AbstractFurnaceBlockEntityMixin extends LockableContainerBlockEntity implements EnchantedFurnaceBlock {
     protected AbstractFurnaceBlockEntityMixin(BlockEntityType<?> blockEntityType, BlockPos blockPos, BlockState blockState) {
         super(blockEntityType, blockPos, blockState);
     }
@@ -74,10 +73,5 @@ public abstract class AbstractFurnaceBlockEntityMixin extends LockableContainerB
     @Inject(method = "tick", at = @At(value = "INVOKE", shift = At.Shift.AFTER, target = "Lnet/minecraft/block/entity/AbstractFurnaceBlockEntity;setLastRecipe(Lnet/minecraft/recipe/Recipe;)V"))
     private static void increaseOutputAmount(World world, BlockPos pos, BlockState state, AbstractFurnaceBlockEntity entity, CallbackInfo info) {
         EnchantedFurnaceBlock.Companion.increaseOutputAmount(entity, world);
-    }
-
-    @Redirect(method = "craftRecipe", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isOf(Lnet/minecraft/item/Item;)Z"))
-    private static boolean craftRecipe(ItemStack stack, Item item) {
-        return stack.isOf(item) && !InfinityBucket.Companion.isInfinityBucket(stack);
     }
 }

@@ -31,7 +31,7 @@ public abstract class BarrelBlockMixin extends BlockWithEntity implements DeepBa
 
     @Inject(method = "onPlaced", at = @At("RETURN"))
     public void onPlaced(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack, CallbackInfo info) {
-        onBlockPlaced(world, pos, state, placer, stack, info);
+        onBlockPlaced(world, pos, state, placer, stack);
 //        onShoppingPlaced(world, pos, state, placer, stack, info);
     }
 
@@ -44,7 +44,7 @@ public abstract class BarrelBlockMixin extends BlockWithEntity implements DeepBa
     @SuppressWarnings("deprecation")
     @Override
     public List<ItemStack> getDroppedStacks(BlockState state, LootContext.Builder builder) {
-        return enchantDrops(super.getDroppedStacks(state, builder), state, builder);
+        return enchantLoots(super.getDroppedStacks(state, builder), state, builder);
     }
 
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {

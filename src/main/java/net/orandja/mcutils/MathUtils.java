@@ -1,5 +1,10 @@
 package net.orandja.mcutils;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.util.math.BlockPos;
+
+import java.util.function.Predicate;
+
 public abstract class MathUtils {
 
     public interface GridConsumer {
@@ -18,4 +23,7 @@ public abstract class MathUtils {
         }
     }
 
+    public static Predicate<Entity> inRange(BlockPos pos, double distance) {
+        return entity -> entity.squaredDistanceTo(pos.getX(), pos.getY(), pos.getZ()) < distance;
+    }
 }

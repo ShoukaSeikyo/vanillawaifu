@@ -26,11 +26,11 @@ abstract class HopperBlockMixin extends BlockWithEntity implements EnchantedHopp
 
     @Inject(method = "onPlaced", at = @At("RETURN"))
     public void onPlaced(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack, CallbackInfo info) {
-        onBlockPlaced(world, pos, state, placer, stack, info);
+        onBlockPlaced(world, pos, state, placer, stack);
     }
 
     @Override
     public List<ItemStack> getDroppedStacks(BlockState state, LootContext.Builder builder) {
-        return enchantDrops(super.getDroppedStacks(state, builder), state, builder);
+        return enchantLoots(super.getDroppedStacks(state, builder), state, builder);
     }
 }

@@ -24,7 +24,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @SuppressWarnings("unused")
 @Mixin(BarrelBlockEntity.class)
-public abstract class BarrelBlockEntityMixin extends LootableContainerBlockEntity implements DeepBarrelBlock, ShoppingBarrel {
+public abstract class BarrelBlockEntityMixin extends LootableContainerBlockEntity implements DeepBarrelBlock {
 
     @Getter @Setter short infinity = 0;
     @Getter @Setter short efficiency = 0;
@@ -38,13 +38,13 @@ public abstract class BarrelBlockEntityMixin extends LootableContainerBlockEntit
 
     @Inject(method = "readNbt", at = @At("HEAD"), cancellable = true)
     public void readNbt(NbtCompound tag, CallbackInfo info) {
-        this.loadShop(tag);
+//        this.loadShop(tag);
         this.loadEnchantments(tag, info, super::readNbt);
     }
 
     @Inject(method = "writeNbt", at = @At("HEAD"), cancellable = true)
     public void writeNbt(NbtCompound tag, CallbackInfo info) {
-        this.saveShop(tag);
+//        this.saveShop(tag);
         this.saveEnchantments(tag, info, super::writeNbt);
     }
 

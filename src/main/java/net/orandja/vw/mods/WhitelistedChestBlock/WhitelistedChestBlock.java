@@ -24,8 +24,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.orandja.mcutils.InventoryUtils;
 import net.orandja.mcutils.NBTUtils;
+import net.orandja.vw.CustomRecipe;
 import net.orandja.vw.VW;
-import net.orandja.vw.logic.CustomRecipe;
 import net.orandja.vw.mods.ProtectBlock.ProtectBlock;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -130,7 +130,7 @@ public interface WhitelistedChestBlock {
     }
 
     static void beforeLaunch() {
-        CustomRecipe.Companion.getCustomShapelessRecipes().put(new Identifier("vanillawaifu", "whitelisted_chest"), WhitelistedChestRecipe::new);
+        CustomRecipe.customShapelessRecipes.put(new Identifier("vanillawaifu", "whitelisted_chest"), WhitelistedChestRecipe::new);
         ProtectBlock.DESTROY.add((world, pos, entity) -> {
            WhitelistedChestBlock chest = getChest(world, pos);
            if(chest == null) {

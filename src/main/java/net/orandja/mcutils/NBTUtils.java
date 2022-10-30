@@ -7,9 +7,14 @@ import net.minecraft.nbt.NbtString;
 
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public abstract class NBTUtils {
 
+    public static NbtList toNbtList(Stream<NbtElement> stream) {
+        return toNbtList(stream.collect(Collectors.toList()));
+    }
     public static NbtList toNbtList(List<NbtElement> list) {
         NbtList nbtList = new NbtList();
         nbtList.addAll(list);
@@ -24,6 +29,12 @@ public abstract class NBTUtils {
     public static NbtList addTo(NbtList list, String string) {
         list.add(NbtString.of(string));
         return list;
+    }
+
+    public static NbtCompound createBlankCompound(Consumer<NbtCompound> consumer) {
+        NbtCompound compound = new NbtCompound();
+        consumer.accept(compound);
+        return compound;
     }
 
     public interface NbtSupplier<N> {

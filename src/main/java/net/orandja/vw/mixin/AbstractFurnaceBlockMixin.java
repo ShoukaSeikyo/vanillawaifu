@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.loot.context.LootContext;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.orandja.vw.logic.BlockWithEnchantment;
+import net.orandja.vw.mods.BlockWithEnchantment.BlockWithEnchantment;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -25,12 +25,12 @@ public abstract class AbstractFurnaceBlockMixin extends BlockWithEntity implemen
 
     @Inject(method = "onPlaced", at = @At("RETURN"))
     public void onPlaced(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack, CallbackInfo info) {
-        onBlockPlaced(world, pos, state, placer, stack, info);
+        onBlockPlaced(world, pos, state, placer, stack);
     }
 
     @SuppressWarnings("deprecation")
     @Override
     public List<ItemStack> getDroppedStacks(BlockState state, LootContext.Builder builder) {
-        return enchantDrops(super.getDroppedStacks(state, builder), state, builder);
+        return enchantLoots(super.getDroppedStacks(state, builder), state, builder);
     }
 }

@@ -8,7 +8,7 @@ import net.minecraft.recipe.CraftingRecipe;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.screen.slot.CraftingResultSlot;
 import net.minecraft.screen.slot.Slot;
-import net.orandja.vw.logic.CustomRecipe;
+import net.orandja.vw.CustomRecipe;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -33,18 +33,11 @@ public abstract class CraftingResultSlotMixin extends Slot implements CustomReci
     @Redirect(method = "onTakeItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/inventory/CraftingInventory;removeStack(II)Lnet/minecraft/item/ItemStack;"))
     public ItemStack onTakeItem(CraftingInventory instance, int slot, int amount) {
         return this.interceptOnTakeItem(recipe, input, this.player, slot, amount);
-//        return this.input.removeStack(slot , 1);
     }
 
     @Inject(method = "onTakeItem", at = @At("HEAD"))
     public void onTakeItemHead(PlayerEntity player, ItemStack stack, CallbackInfo ci) {
-        Optional<CraftingRecipe> optional = player.world.getRecipeManager().getFirstMatch(RecipeType.CRAFTING, input, player.world);
-        this.recipe = optional.orElse(null);
+        this.recipe = player.world.getRecipeManager().getFirstMatch(RecipeType.CRAFTING, input, player.world).orElse(null);
     }
-//
-//    @Inject(method = "onTakeItem", at @At("RETURN"))
-//    public void onTakeItemReturn(PlayerEntity player, ItemStack stack, CallbackInfo ci) {
-//        this.recipe = null;
-//    }
 
 }

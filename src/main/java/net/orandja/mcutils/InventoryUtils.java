@@ -14,6 +14,8 @@ import net.orandja.vw.accessor.ScreenHandlerAccessor;
 import org.apache.commons.compress.utils.Lists;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.stream.Stream;
 
 public abstract class InventoryUtils {
 
@@ -80,6 +82,14 @@ public abstract class InventoryUtils {
 
     public static ItemStack[] toArray(Inventory inventory) {
         return toArray(inventory);
+    }
+
+    public static Stream<ItemStack> toStream(Inventory inventory) {
+        return Arrays.stream(InventoryUtils.toArray(inventory));
+    }
+
+    public static Stream<ItemStack> toStream(Inventory inventory, boolean nonEmpty) {
+        return Arrays.stream(InventoryUtils.toArray(inventory, nonEmpty));
     }
     public static ItemStack[] toArray(Inventory inventory, boolean nonEmpty) {
         ArrayList<ItemStack> list = Lists.newArrayList();

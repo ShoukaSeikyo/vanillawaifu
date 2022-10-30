@@ -5,6 +5,8 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import net.minecraft.server.MinecraftServer
 import net.orandja.vw.logic.*
 import net.orandja.vw.mods.AnimalTemptation.AnimalTemptation
+import net.orandja.vw.mods.CloudShulkerBox.CloudShulkerBox
+import net.orandja.vw.mods.InfinityBucket.InfinityBucket
 import net.orandja.vw.mods.WhitelistedChestBlock.WhitelistedChestBlock
 import java.util.concurrent.atomic.AtomicReference
 
@@ -22,7 +24,7 @@ class VW : ModInitializer {
     override fun onInitialize() {
         AnimalTemptation.beforeLaunch()
 
-        CloudShulkerBox.beforeLaunch()
+        CloudShulkerBox.beforeLaunch();
         DeepBarrelBlock.beforeLaunch()
         DoubleTool.beforeLaunch()
         EnchantedHopper.beforeLaunch()

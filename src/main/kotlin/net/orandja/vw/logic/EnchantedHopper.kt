@@ -18,7 +18,8 @@ import net.minecraft.util.math.Direction
 import net.minecraft.util.shape.VoxelShape
 import net.minecraft.world.World
 import net.orandja.mcutils.canMerge
-import net.orandja.vw.logic.EnchantMore.Companion.addBasic
+import net.orandja.vw.mods.BlockWithEnchantment.BlockWithEnchantment
+import net.orandja.vw.mods.EnchantMore.EnchantMore.addBasic
 import net.orandja.vw.mods.ProtectBlock.ProtectBlock
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable
 import java.util.function.BooleanSupplier
@@ -70,7 +71,7 @@ interface EnchantedHopper: BlockWithEnchantment, Inventory, ProtectBlock {
         return mending > 0 || efficiency > 0 || silkTouch > 0 || sweeping > 0 || knockback > 0
     }
 
-    override fun applyEnchantments(name: String, level: Short) {
+    override fun applyEnchantment(name: String, level: Short) {
         when (name) {
             "efficiency" -> efficiency = level
             "silk_touch" -> silkTouch = level
@@ -84,7 +85,7 @@ interface EnchantedHopper: BlockWithEnchantment, Inventory, ProtectBlock {
 
         fun beforeLaunch() {
             addBasic(
-                item = Items.HOPPER,
+                Items.HOPPER,
                 Enchantments.EFFICIENCY,
                 Enchantments.SILK_TOUCH,
                 Enchantments.MENDING,

@@ -2,7 +2,7 @@ package net.orandja.vw.mixin;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.ItemStack;
-import net.orandja.vw.logic.EnchantMore;
+import net.orandja.vw.mods.EnchantMore.EnchantMore;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -17,6 +17,6 @@ abstract class EnchantmentMixin implements EnchantMore {
 
     @Inject(method = "isAcceptableItem", at = @At("HEAD"), cancellable = true)
     void isAcceptableItem(ItemStack stack, CallbackInfoReturnable<Boolean> info) {
-        itemAcceptsEnchant(this, stack, info);
+        itemAcceptsEnchantment(this, stack, info);
     }
 }

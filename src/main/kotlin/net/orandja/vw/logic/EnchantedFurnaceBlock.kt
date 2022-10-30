@@ -7,7 +7,8 @@ import net.minecraft.item.Items
 import net.minecraft.util.collection.DefaultedList
 import net.minecraft.util.math.MathHelper
 import net.minecraft.world.World
-import net.orandja.vw.logic.EnchantMore.Companion.addBasic
+import net.orandja.vw.mods.BlockWithEnchantment.BlockWithEnchantment
+import net.orandja.vw.mods.EnchantMore.EnchantMore.addBasic
 import kotlin.math.max
 
 interface EnchantedFurnaceBlock : BlockWithEnchantment {
@@ -42,7 +43,7 @@ interface EnchantedFurnaceBlock : BlockWithEnchantment {
         return smite > 0 || efficiency > 0 || flame > 0 || unbreaking > 0 || fireAspect > 0 || fortune > 0
     }
 
-    override fun applyEnchantments(name: String, level: Short) {
+    override fun applyEnchantment(name: String, level: Short) {
         when (name) {
             "smite" -> smite = level
             "efficiency" -> efficiency = level
@@ -81,7 +82,7 @@ interface EnchantedFurnaceBlock : BlockWithEnchantment {
 
         fun beforeLaunch() {
             addBasic(
-                item = Items.FURNACE,
+                Items.FURNACE,
                 Enchantments.SMITE,
                 Enchantments.EFFICIENCY,
                 Enchantments.FORTUNE,
@@ -91,7 +92,7 @@ interface EnchantedFurnaceBlock : BlockWithEnchantment {
             )
 
             addBasic(
-                item = Items.SMOKER,
+                Items.SMOKER,
                 Enchantments.SMITE,
                 Enchantments.EFFICIENCY,
                 Enchantments.FORTUNE,
@@ -102,7 +103,7 @@ interface EnchantedFurnaceBlock : BlockWithEnchantment {
 
 
             addBasic(
-                item = Items.BLAST_FURNACE,
+                Items.BLAST_FURNACE,
                 Enchantments.SMITE,
                 Enchantments.EFFICIENCY,
                 Enchantments.FORTUNE,
